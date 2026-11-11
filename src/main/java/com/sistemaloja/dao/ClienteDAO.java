@@ -191,9 +191,10 @@ public class ClienteDAO {
 
     private SQLException traduzirDuplicidade(SQLException e) {
         String msg = e.getMessage() == null ? "" : e.getMessage().toLowerCase();
-        if (msg.contains("duplicate") && msg.contains("email"))
+        boolean duplicado = msg.contains("unique") || msg.contains("duplicate");
+        if (duplicado && msg.contains("email"))
             return new SQLException("Já existe um cliente com este e-mail.", e);
-        if (msg.contains("duplicate") && msg.contains("cpf"))
+        if (duplicado && msg.contains("cpf"))
             return new SQLException("Já existe um cliente com este CPF.", e);
         return e;
     }

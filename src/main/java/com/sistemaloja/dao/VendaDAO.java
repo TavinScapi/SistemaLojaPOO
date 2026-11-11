@@ -21,7 +21,7 @@ public class VendaDAO {
 
         String sqlProduto =
             "SELECT preco, estoque FROM produtos "
-            + "WHERE id = ? AND ativo = TRUE FOR UPDATE";
+            + "WHERE id = ? AND ativo = TRUE";
 
         String sqlVenda =
             "INSERT INTO vendas "
