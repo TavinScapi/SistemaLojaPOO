@@ -2,14 +2,9 @@ package com.sistemaloja.view;
 
 import com.sistemaloja.dao.ProdutoDAO;
 import com.sistemaloja.model.Produto;
-import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
@@ -17,7 +12,6 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
@@ -43,7 +37,6 @@ public class TelaProdutos extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setMinimumSize(new Dimension(950, 560));
 
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -53,11 +46,7 @@ public class TelaProdutos extends javax.swing.JFrame {
             }
         });
 
-        aplicarHover(btnCadastrar);
-        aplicarHover(btnEditar);
-        aplicarHover(btnExcluir);
-        aplicarHover(btnLimpar);
-        aplicarHover(btnVoltar);
+        Estilo.aplicarHover(btnVoltar, btnCadastrar, btnEditar, btnExcluir, btnLimpar);
 
         configurarTabela();
 
@@ -74,22 +63,6 @@ public class TelaProdutos extends javax.swing.JFrame {
         carregarProdutos();
     }
 
-    private void aplicarHover(JButton btn) {
-        Color base = btn.getBackground();
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btn.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        btn.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                if (btn.isEnabled()) btn.setBackground(base.darker());
-            }
-            @Override
-            public void mouseExited(MouseEvent e) {
-                btn.setBackground(base);
-            }
-        });
-    }
-
     private void configurarTabela() {
         modeloTabela = new DefaultTableModel(
                 new Object[]{"Código", "Nome", "Preço", "Estoque"}, 0) {
@@ -99,11 +72,9 @@ public class TelaProdutos extends javax.swing.JFrame {
             }
         };
         tabela.setModel(modeloTabela);
-        tabela.setRowHeight(26);
-        tabela.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        tabela.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
+        Estilo.estilizarTabela(tabela);
+        Estilo.alinharDireita(tabela, 2, 3);
         tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        tabela.setShowGrid(false);
 
         tabela.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && tabela.getSelectedRow() != -1) {
@@ -174,7 +145,7 @@ public class TelaProdutos extends javax.swing.JFrame {
         btnEditar.setEnabled(false);
         btnExcluir.setEnabled(false);
         btnLimpar.setText("Limpar");
-        lblTitulo.setText("Cadastro de Produtos");
+        lblTitulo.setText("Cadastro de produtos");
         tabela.clearSelection();
         txtNome.requestFocusInWindow();
     }
@@ -199,7 +170,7 @@ public class TelaProdutos extends javax.swing.JFrame {
         txtPreco.setEditable(true);
         txtEstoque.setEditable(true);
 
-        btnCadastrar.setText("Salvar alterações");
+        btnCadastrar.setText("Salvar");
         btnCadastrar.setEnabled(true);
         btnEditar.setEnabled(false);
         btnExcluir.setEnabled(false);
@@ -234,11 +205,19 @@ public class TelaProdutos extends javax.swing.JFrame {
     }
 
     @SuppressWarnings("unchecked")
-
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
+
+        pnlCabecalho = new javax.swing.JPanel();
+        pnlTitulos = new javax.swing.JPanel();
+        lblMarca = new javax.swing.JLabel();
         lblTitulo = new javax.swing.JLabel();
+        pnlAcoesCabecalho = new javax.swing.JPanel();
         btnVoltar = new javax.swing.JButton();
+        pnlCorpo = new javax.swing.JPanel();
         pnlFormulario = new javax.swing.JPanel();
+        lblFormTitulo = new javax.swing.JLabel();
         lblCodigo = new javax.swing.JLabel();
         txtCodigo = new javax.swing.JTextField();
         lblNome = new javax.swing.JLabel();
@@ -247,200 +226,266 @@ public class TelaProdutos extends javax.swing.JFrame {
         txtPreco = new javax.swing.JTextField();
         lblEstoque = new javax.swing.JLabel();
         txtEstoque = new javax.swing.JTextField();
+        pnlBotoes = new javax.swing.JPanel();
         btnCadastrar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
         btnLimpar = new javax.swing.JButton();
         pnlTabela = new javax.swing.JPanel();
+        pnlTabelaTopo = new javax.swing.JPanel();
+        lblTabelaTitulo = new javax.swing.JLabel();
         lblBusca = new javax.swing.JLabel();
         txtBusca = new javax.swing.JTextField();
         scrollTabela = new javax.swing.JScrollPane();
         tabela = new javax.swing.JTable();
 
-        setTitle("Produtos - " + TelaPrincipal.NOME_LOJA);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("Produtos - OctoMax");
+        getContentPane().setLayout(new java.awt.BorderLayout());
 
-        lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 20));
-        lblTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblTitulo.setText("Cadastro de Produtos");
+        pnlCabecalho.setBackground(new java.awt.Color(24, 36, 56));
+        pnlCabecalho.setBorder(javax.swing.BorderFactory.createEmptyBorder(18, 32, 18, 32));
+        pnlCabecalho.setLayout(new java.awt.BorderLayout());
+        pnlTitulos.setOpaque(false);
+        pnlTitulos.setLayout(new java.awt.GridLayout(2, 1, 0, 2));
+        lblMarca.setFont(new java.awt.Font("Segoe UI", 0, 12));
+        lblMarca.setForeground(new java.awt.Color(173, 181, 189));
+        lblMarca.setText("OctoMax");
 
+        pnlTitulos.add(lblMarca);
+        lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 22));
+        lblTitulo.setForeground(new java.awt.Color(255, 255, 255));
+        lblTitulo.setText("Cadastro de produtos");
+
+        pnlTitulos.add(lblTitulo);
+
+        pnlCabecalho.add(pnlTitulos, java.awt.BorderLayout.WEST);
+        pnlAcoesCabecalho.setOpaque(false);
+        pnlAcoesCabecalho.setLayout(new java.awt.GridBagLayout());
+        btnVoltar.setBackground(new java.awt.Color(52, 68, 94));
+        btnVoltar.setFont(new java.awt.Font("Segoe UI", 1, 13));
+        btnVoltar.setForeground(new java.awt.Color(255, 255, 255));
         btnVoltar.setText("← Voltar");
+        btnVoltar.setBorderPainted(false);
+        btnVoltar.setFocusPainted(false);
+        btnVoltar.setOpaque(true);
+        btnVoltar.setPreferredSize(new java.awt.Dimension(110, 36));
         btnVoltar.addActionListener(this::btnVoltarActionPerformed);
 
-        pnlFormulario.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                javax.swing.BorderFactory.createLineBorder(new java.awt.Color(222, 226, 230)),
-                javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20)));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        pnlAcoesCabecalho.add(btnVoltar, gridBagConstraints);
 
+        pnlCabecalho.add(pnlAcoesCabecalho, java.awt.BorderLayout.EAST);
+
+        getContentPane().add(pnlCabecalho, java.awt.BorderLayout.NORTH);
+        pnlCorpo.setBackground(new java.awt.Color(244, 246, 249));
+        pnlCorpo.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 32, 24, 32));
+        pnlCorpo.setLayout(new java.awt.BorderLayout(20, 0));
+        pnlFormulario.setBackground(new java.awt.Color(255, 255, 255));
+        pnlFormulario.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(222, 226, 230)), javax.swing.BorderFactory.createEmptyBorder(18, 20, 18, 20)));
+        pnlFormulario.setPreferredSize(new java.awt.Dimension(340, 560));
+        pnlFormulario.setLayout(new java.awt.GridBagLayout());
+        lblFormTitulo.setFont(new java.awt.Font("Segoe UI", 1, 15));
+        lblFormTitulo.setForeground(new java.awt.Color(33, 37, 41));
+        lblFormTitulo.setText("Dados do produto");
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+        pnlFormulario.add(lblFormTitulo, gridBagConstraints);
         lblCodigo.setFont(new java.awt.Font("Segoe UI", 1, 12));
+        lblCodigo.setForeground(new java.awt.Color(108, 117, 125));
         lblCodigo.setText("Código");
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
+        pnlFormulario.add(lblCodigo, gridBagConstraints);
+        txtCodigo.setFont(new java.awt.Font("Segoe UI", 0, 14));
         txtCodigo.setEditable(false);
         txtCodigo.setBackground(new java.awt.Color(233, 236, 239));
-        txtCodigo.setFont(new java.awt.Font("Segoe UI", 0, 14));
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 8, 0);
+        pnlFormulario.add(txtCodigo, gridBagConstraints);
         lblNome.setFont(new java.awt.Font("Segoe UI", 1, 12));
-        lblNome.setText("Nome do Produto");
+        lblNome.setForeground(new java.awt.Color(108, 117, 125));
+        lblNome.setText("Nome do produto *");
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
+        pnlFormulario.add(lblNome, gridBagConstraints);
         txtNome.setFont(new java.awt.Font("Segoe UI", 0, 14));
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 8, 0);
+        pnlFormulario.add(txtNome, gridBagConstraints);
         lblPreco.setFont(new java.awt.Font("Segoe UI", 1, 12));
-        lblPreco.setText("Preço (R$)");
+        lblPreco.setForeground(new java.awt.Color(108, 117, 125));
+        lblPreco.setText("Preço (R$) *");
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 12);
+        pnlFormulario.add(lblPreco, gridBagConstraints);
         txtPreco.setFont(new java.awt.Font("Segoe UI", 0, 14));
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 8, 12);
+        pnlFormulario.add(txtPreco, gridBagConstraints);
         lblEstoque.setFont(new java.awt.Font("Segoe UI", 1, 12));
-        lblEstoque.setText("Estoque");
+        lblEstoque.setForeground(new java.awt.Color(108, 117, 125));
+        lblEstoque.setText("Estoque *");
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
+        pnlFormulario.add(lblEstoque, gridBagConstraints);
         txtEstoque.setFont(new java.awt.Font("Segoe UI", 0, 14));
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 8, 0);
+        pnlFormulario.add(txtEstoque, gridBagConstraints);
+        pnlBotoes.setOpaque(false);
+        pnlBotoes.setLayout(new java.awt.GridLayout(2, 2, 8, 8));
+        btnCadastrar.setBackground(new java.awt.Color(13, 110, 253));
+        btnCadastrar.setFont(new java.awt.Font("Segoe UI", 1, 13));
+        btnCadastrar.setForeground(new java.awt.Color(255, 255, 255));
         btnCadastrar.setText("Cadastrar");
+        btnCadastrar.setBorderPainted(false);
+        btnCadastrar.setFocusPainted(false);
+        btnCadastrar.setOpaque(true);
+        btnCadastrar.setPreferredSize(new java.awt.Dimension(120, 36));
         btnCadastrar.addActionListener(this::btnCadastrarActionPerformed);
 
+        pnlBotoes.add(btnCadastrar);
+        btnEditar.setBackground(new java.awt.Color(25, 135, 84));
+        btnEditar.setFont(new java.awt.Font("Segoe UI", 1, 13));
+        btnEditar.setForeground(new java.awt.Color(255, 255, 255));
         btnEditar.setText("Editar");
+        btnEditar.setBorderPainted(false);
+        btnEditar.setFocusPainted(false);
+        btnEditar.setOpaque(true);
+        btnEditar.setPreferredSize(new java.awt.Dimension(120, 36));
         btnEditar.addActionListener(this::btnEditarActionPerformed);
 
+        pnlBotoes.add(btnEditar);
+        btnExcluir.setBackground(new java.awt.Color(220, 53, 69));
+        btnExcluir.setFont(new java.awt.Font("Segoe UI", 1, 13));
+        btnExcluir.setForeground(new java.awt.Color(255, 255, 255));
         btnExcluir.setText("Excluir");
+        btnExcluir.setBorderPainted(false);
+        btnExcluir.setFocusPainted(false);
+        btnExcluir.setOpaque(true);
+        btnExcluir.setPreferredSize(new java.awt.Dimension(120, 36));
         btnExcluir.addActionListener(this::btnExcluirActionPerformed);
 
+        pnlBotoes.add(btnExcluir);
+        btnLimpar.setBackground(new java.awt.Color(108, 117, 125));
+        btnLimpar.setFont(new java.awt.Font("Segoe UI", 1, 13));
+        btnLimpar.setForeground(new java.awt.Color(255, 255, 255));
         btnLimpar.setText("Limpar");
+        btnLimpar.setBorderPainted(false);
+        btnLimpar.setFocusPainted(false);
+        btnLimpar.setOpaque(true);
+        btnLimpar.setPreferredSize(new java.awt.Dimension(120, 36));
         btnLimpar.addActionListener(this::btnLimparActionPerformed);
 
-        javax.swing.GroupLayout pnlFormularioLayout = new javax.swing.GroupLayout(pnlFormulario);
-        pnlFormulario.setLayout(pnlFormularioLayout);
-        pnlFormularioLayout.setHorizontalGroup(
-            pnlFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlFormularioLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtNome)
-                    .addComponent(txtPreco)
-                    .addComponent(txtEstoque)
-                    .addGroup(pnlFormularioLayout.createSequentialGroup()
-                        .addGroup(pnlFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblCodigo)
-                            .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(lblNome)
-                    .addComponent(lblPreco)
-                    .addComponent(lblEstoque)
-                    .addGroup(pnlFormularioLayout.createSequentialGroup()
-                        .addGroup(pnlFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnCadastrar, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
-                            .addComponent(btnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pnlFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnLimpar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnExcluir, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        pnlFormularioLayout.setVerticalGroup(
-            pnlFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlFormularioLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblCodigo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblNome)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblPreco)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtPreco, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblEstoque)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtEstoque, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(24, 24, 24)
-                .addGroup(pnlFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        pnlBotoes.add(btnLimpar);
 
-        pnlTabela.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                javax.swing.BorderFactory.createLineBorder(new java.awt.Color(222, 226, 230)),
-                javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20)));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        pnlFormulario.add(pnlBotoes, gridBagConstraints);
 
+        pnlCorpo.add(pnlFormulario, java.awt.BorderLayout.WEST);
+        pnlTabela.setBackground(new java.awt.Color(255, 255, 255));
+        pnlTabela.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(222, 226, 230)), javax.swing.BorderFactory.createEmptyBorder(18, 20, 18, 20)));
+        pnlTabela.setLayout(new java.awt.BorderLayout(0, 12));
+        pnlTabelaTopo.setOpaque(false);
+        pnlTabelaTopo.setLayout(new java.awt.BorderLayout(0, 6));
+        lblTabelaTitulo.setFont(new java.awt.Font("Segoe UI", 1, 15));
+        lblTabelaTitulo.setForeground(new java.awt.Color(33, 37, 41));
+        lblTabelaTitulo.setText("Produtos cadastrados");
+
+        pnlTabelaTopo.add(lblTabelaTitulo, java.awt.BorderLayout.NORTH);
         lblBusca.setFont(new java.awt.Font("Segoe UI", 1, 12));
+        lblBusca.setForeground(new java.awt.Color(108, 117, 125));
         lblBusca.setText("Buscar por nome:");
 
-        txtBusca.setFont(new java.awt.Font("Segoe UI", 0, 13));
+        pnlTabelaTopo.add(lblBusca, java.awt.BorderLayout.CENTER);
+        txtBusca.setFont(new java.awt.Font("Segoe UI", 0, 14));
 
-        tabela.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {},
-            new String [] {
-                "Código", "Nome", "Preço", "Estoque"
-            }
-        ));
+        pnlTabelaTopo.add(txtBusca, java.awt.BorderLayout.SOUTH);
+
+        pnlTabela.add(pnlTabelaTopo, java.awt.BorderLayout.NORTH);
+
         scrollTabela.setViewportView(tabela);
 
-        javax.swing.GroupLayout pnlTabelaLayout = new javax.swing.GroupLayout(pnlTabela);
-        pnlTabela.setLayout(pnlTabelaLayout);
-        pnlTabelaLayout.setHorizontalGroup(
-            pnlTabelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlTabelaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlTabelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(scrollTabela, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
-                    .addGroup(pnlTabelaLayout.createSequentialGroup()
-                        .addComponent(lblBusca)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtBusca)))
-                .addContainerGap())
-        );
-        pnlTabelaLayout.setVerticalGroup(
-            pnlTabelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlTabelaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlTabelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblBusca)
-                    .addComponent(txtBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(scrollTabela, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        pnlTabela.add(scrollTabela, java.awt.BorderLayout.CENTER);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnVoltar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(pnlFormulario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pnlTabela, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnVoltar)
-                    .addComponent(lblTitulo))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlFormulario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlTabela, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
+        pnlCorpo.add(pnlTabela, java.awt.BorderLayout.CENTER);
+
+        getContentPane().add(pnlCorpo, java.awt.BorderLayout.CENTER);
 
         pack();
-    }
+    }// </editor-fold>//GEN-END:initComponents
 
-    private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
         String nome = txtNome.getText().trim();
         String precoTexto = txtPreco.getText().trim().replace(",", ".");
         String estoqueTexto = txtEstoque.getText().trim();
@@ -494,9 +539,9 @@ public class TelaProdutos extends javax.swing.JFrame {
         } catch (SQLException ex) {
             mostrarErro("Erro ao salvar produto", ex);
         }
-    }
+    }//GEN-LAST:event_btnCadastrarActionPerformed
 
-    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         if (idProdutoSelecionado == -1) {
             JOptionPane.showMessageDialog(this,
                     "Selecione um produto na tabela primeiro.",
@@ -504,9 +549,9 @@ public class TelaProdutos extends javax.swing.JFrame {
             return;
         }
         entrarModoEdicao();
-    }
+    }//GEN-LAST:event_btnEditarActionPerformed
 
-    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         if (idProdutoSelecionado == -1) {
             JOptionPane.showMessageDialog(this,
                     "Selecione um produto para excluir.",
@@ -527,19 +572,20 @@ public class TelaProdutos extends javax.swing.JFrame {
         } catch (SQLException ex) {
             mostrarErro("Erro ao excluir produto", ex);
         }
-    }
+    }//GEN-LAST:event_btnExcluirActionPerformed
 
-    private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
         if (modoEdicao && !confirmarDescarte()) return;
         entrarModoNovo();
-    }
+    }//GEN-LAST:event_btnLimparActionPerformed
 
-    private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
         if (confirmarDescarte()) {
             voltarParaPrincipal();
         }
-    }
+    }//GEN-LAST:event_btnVoltarActionPerformed
 
+    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCadastrar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnExcluir;
@@ -548,11 +594,20 @@ public class TelaProdutos extends javax.swing.JFrame {
     private javax.swing.JLabel lblBusca;
     private javax.swing.JLabel lblCodigo;
     private javax.swing.JLabel lblEstoque;
+    private javax.swing.JLabel lblFormTitulo;
+    private javax.swing.JLabel lblMarca;
     private javax.swing.JLabel lblNome;
     private javax.swing.JLabel lblPreco;
+    private javax.swing.JLabel lblTabelaTitulo;
     private javax.swing.JLabel lblTitulo;
+    private javax.swing.JPanel pnlAcoesCabecalho;
+    private javax.swing.JPanel pnlBotoes;
+    private javax.swing.JPanel pnlCabecalho;
+    private javax.swing.JPanel pnlCorpo;
     private javax.swing.JPanel pnlFormulario;
     private javax.swing.JPanel pnlTabela;
+    private javax.swing.JPanel pnlTabelaTopo;
+    private javax.swing.JPanel pnlTitulos;
     private javax.swing.JScrollPane scrollTabela;
     private javax.swing.JTable tabela;
     private javax.swing.JTextField txtBusca;
@@ -560,6 +615,7 @@ public class TelaProdutos extends javax.swing.JFrame {
     private javax.swing.JTextField txtEstoque;
     private javax.swing.JTextField txtNome;
     private javax.swing.JTextField txtPreco;
+    // End of variables declaration//GEN-END:variables
 
     private javax.swing.table.DefaultTableModel modeloTabela;
 }

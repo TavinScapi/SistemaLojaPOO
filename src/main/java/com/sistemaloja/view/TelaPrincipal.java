@@ -3,15 +3,7 @@ package com.sistemaloja.view;
 import com.sistemaloja.dao.ClienteDAO;
 import com.sistemaloja.dao.ProdutoDAO;
 import com.sistemaloja.dao.VendaDAO;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
@@ -22,34 +14,19 @@ import java.util.Locale;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
-public class TelaPrincipal extends JFrame {
+public class TelaPrincipal extends javax.swing.JFrame {
     private static final Logger logger = Logger.getLogger(TelaPrincipal.class.getName());
-
-    public static final String NOME_LOJA = "OctoMax";
-
     private static final Locale BR = Locale.of("pt", "BR");
-    private static final Color FUNDO = new Color(244, 246, 249);
-    private static final Color AZUL_ESCURO = new Color(24, 36, 56);
-    private static final Color TEXTO = new Color(33, 37, 41);
-    private static final Color TEXTO_SUAVE = new Color(108, 117, 125);
-    private static final Color BORDA = new Color(222, 226, 230);
-    private static final String FONTE = "Segoe UI";
-
-    private final JLabel lblClientes = new JLabel("-");
-    private final JLabel lblProdutos = new JLabel("-");
-    private final JLabel lblVendas = new JLabel("-");
 
     public TelaPrincipal() {
-        setTitle(NOME_LOJA + " - Sistema de Gestão");
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        initComponents();
+        posConstrucao();
+    }
+
+    private void posConstrucao() {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -57,137 +34,16 @@ public class TelaPrincipal extends JFrame {
             }
         });
 
-        JPanel conteudo = new JPanel(new BorderLayout());
-        conteudo.setBackground(FUNDO);
-        conteudo.add(criarCabecalho(), BorderLayout.NORTH);
-        conteudo.add(criarCentro(), BorderLayout.CENTER);
-        conteudo.add(criarRodape(), BorderLayout.SOUTH);
-        setContentPane(conteudo);
+        Estilo.aplicarHover(btnClientes, btnProdutos, btnVendas, btnSair);
+        btnClientes.setMnemonic(KeyEvent.VK_C);
+        btnProdutos.setMnemonic(KeyEvent.VK_P);
+        btnVendas.setMnemonic(KeyEvent.VK_V);
+
+        String hoje = LocalDate.now().format(DateTimeFormatter.ofPattern("EEEE, dd 'de' MMMM 'de' yyyy", BR));
+        lblData.setText(Character.toUpperCase(hoje.charAt(0)) + hoje.substring(1));
 
         carregarResumo();
-
-        setMinimumSize(new Dimension(820, 540));
-        pack();
         setLocationRelativeTo(null);
-    }
-
-    private JPanel criarCabecalho() {
-        JPanel painel = new JPanel(new GridLayout(2, 1, 0, 4));
-        painel.setBackground(AZUL_ESCURO);
-        painel.setBorder(BorderFactory.createEmptyBorder(28, 32, 28, 32));
-
-        JLabel titulo = new JLabel(NOME_LOJA, SwingConstants.CENTER);
-        titulo.setFont(new Font(FONTE, Font.BOLD, 34));
-        titulo.setForeground(Color.WHITE);
-
-        JLabel subtitulo = new JLabel("Sistema de gestão da loja", SwingConstants.CENTER);
-        subtitulo.setFont(new Font(FONTE, Font.PLAIN, 15));
-        subtitulo.setForeground(new Color(173, 181, 189));
-
-        painel.add(titulo);
-        painel.add(subtitulo);
-        return painel;
-    }
-
-    private JPanel criarCentro() {
-        JPanel resumo = new JPanel(new GridLayout(1, 3, 16, 0));
-        resumo.setOpaque(false);
-        resumo.add(criarIndicador("Clientes ativos", lblClientes));
-        resumo.add(criarIndicador("Produtos cadastrados", lblProdutos));
-        resumo.add(criarIndicador("Total em vendas", lblVendas));
-
-        JPanel modulos = new JPanel(new GridLayout(1, 3, 16, 0));
-        modulos.setOpaque(false);
-        modulos.add(criarBotaoModulo("Clientes", "Cadastrar e consultar clientes",
-                new Color(13, 110, 253), KeyEvent.VK_C, () -> abrirTela(TelaClientes::new, "Clientes")));
-        modulos.add(criarBotaoModulo("Produtos", "Gerenciar produtos e estoque",
-                new Color(25, 135, 84), KeyEvent.VK_P, () -> abrirTela(TelaProdutos::new, "Produtos")));
-        modulos.add(criarBotaoModulo("Vendas", "Registrar vendas e ver histórico",
-                new Color(214, 92, 0), KeyEvent.VK_V, () -> abrirTela(TelaVendas::new, "Vendas")));
-
-        JLabel lblModulos = new JLabel("Selecione um módulo");
-        lblModulos.setFont(new Font(FONTE, Font.BOLD, 14));
-        lblModulos.setForeground(TEXTO_SUAVE);
-        lblModulos.setBorder(BorderFactory.createEmptyBorder(24, 2, 10, 0));
-
-        JPanel blocoModulos = new JPanel(new BorderLayout());
-        blocoModulos.setOpaque(false);
-        blocoModulos.add(lblModulos, BorderLayout.NORTH);
-        blocoModulos.add(modulos, BorderLayout.CENTER);
-
-        JPanel centro = new JPanel(new BorderLayout());
-        centro.setOpaque(false);
-        centro.setBorder(BorderFactory.createEmptyBorder(24, 32, 8, 32));
-        centro.add(resumo, BorderLayout.NORTH);
-        centro.add(blocoModulos, BorderLayout.CENTER);
-        return centro;
-    }
-
-    private JPanel criarIndicador(String titulo, JLabel valor) {
-        JPanel card = new JPanel(new GridLayout(2, 1, 0, 2));
-        card.setBackground(Color.WHITE);
-        card.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(BORDA),
-                BorderFactory.createEmptyBorder(14, 18, 14, 18)));
-
-        JLabel lblTitulo = new JLabel(titulo);
-        lblTitulo.setFont(new Font(FONTE, Font.PLAIN, 13));
-        lblTitulo.setForeground(TEXTO_SUAVE);
-
-        valor.setFont(new Font(FONTE, Font.BOLD, 22));
-        valor.setForeground(TEXTO);
-
-        card.add(lblTitulo);
-        card.add(valor);
-        return card;
-    }
-
-    private JButton criarBotaoModulo(String titulo, String descricao, Color cor,
-                                     int atalho, Runnable acao) {
-        JButton btn = new JButton("<html><div style='text-align:center'>"
-                + "<span style='font-size:16pt'><b>" + titulo + "</b></span><br><br>"
-                + descricao + "</div></html>");
-        btn.setFont(new Font(FONTE, Font.PLAIN, 13));
-        btn.setForeground(Color.WHITE);
-        btn.setBackground(cor);
-        btn.setOpaque(true);
-        btn.setBorderPainted(false);
-        btn.setFocusPainted(false);
-        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btn.setPreferredSize(new Dimension(220, 150));
-        btn.setMnemonic(atalho);
-        btn.setToolTipText("Atalho: Alt+" + KeyEvent.getKeyText(atalho));
-        btn.addActionListener(e -> acao.run());
-        btn.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                btn.setBackground(cor.darker());
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                btn.setBackground(cor);
-            }
-        });
-        return btn;
-    }
-
-    private JPanel criarRodape() {
-        String hoje = LocalDate.now().format(DateTimeFormatter.ofPattern("EEEE, dd 'de' MMMM 'de' yyyy", BR));
-        JLabel lblData = new JLabel(Character.toUpperCase(hoje.charAt(0)) + hoje.substring(1));
-        lblData.setFont(new Font(FONTE, Font.PLAIN, 12));
-        lblData.setForeground(TEXTO_SUAVE);
-
-        JButton btnSair = new JButton("Sair");
-        btnSair.setFont(new Font(FONTE, Font.PLAIN, 13));
-        btnSair.addActionListener(e -> confirmarSaida());
-
-        JPanel rodape = new JPanel(new BorderLayout());
-        rodape.setOpaque(false);
-        rodape.setBorder(BorderFactory.createEmptyBorder(12, 32, 20, 32));
-        rodape.add(lblData, BorderLayout.WEST);
-        rodape.add(btnSair, BorderLayout.EAST);
-        return rodape;
     }
 
     private void carregarResumo() {
@@ -217,7 +73,7 @@ public class TelaPrincipal extends JFrame {
 
     private void confirmarSaida() {
         int resposta = JOptionPane.showConfirmDialog(this,
-                "Deseja realmente sair do " + NOME_LOJA + "?",
+                "Deseja realmente sair do OctoMax?",
                 "Confirmar saída",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE);
@@ -225,4 +81,223 @@ public class TelaPrincipal extends JFrame {
             System.exit(0);
         }
     }
+
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+        pnlCabecalho = new javax.swing.JPanel();
+        lblTitulo = new javax.swing.JLabel();
+        lblSubtitulo = new javax.swing.JLabel();
+        pnlCorpo = new javax.swing.JPanel();
+        pnlResumo = new javax.swing.JPanel();
+        pnlIndClientes = new javax.swing.JPanel();
+        lblClientesTitulo = new javax.swing.JLabel();
+        lblClientes = new javax.swing.JLabel();
+        pnlIndProdutos = new javax.swing.JPanel();
+        lblProdutosTitulo = new javax.swing.JLabel();
+        lblProdutos = new javax.swing.JLabel();
+        pnlIndVendas = new javax.swing.JPanel();
+        lblVendasTitulo = new javax.swing.JLabel();
+        lblVendas = new javax.swing.JLabel();
+        pnlModulosBloco = new javax.swing.JPanel();
+        lblModulos = new javax.swing.JLabel();
+        pnlModulos = new javax.swing.JPanel();
+        btnClientes = new javax.swing.JButton();
+        btnProdutos = new javax.swing.JButton();
+        btnVendas = new javax.swing.JButton();
+        pnlRodape = new javax.swing.JPanel();
+        lblData = new javax.swing.JLabel();
+        btnSair = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("OctoMax - Sistema de Gestão");
+        setMinimumSize(new java.awt.Dimension(820, 540));
+        getContentPane().setLayout(new java.awt.BorderLayout());
+
+        pnlCabecalho.setBackground(new java.awt.Color(24, 36, 56));
+        pnlCabecalho.setBorder(javax.swing.BorderFactory.createEmptyBorder(28, 32, 28, 32));
+        pnlCabecalho.setLayout(new java.awt.GridLayout(2, 1, 0, 4));
+        lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 34));
+        lblTitulo.setForeground(new java.awt.Color(255, 255, 255));
+        lblTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTitulo.setText("OctoMax");
+
+        pnlCabecalho.add(lblTitulo);
+        lblSubtitulo.setFont(new java.awt.Font("Segoe UI", 0, 15));
+        lblSubtitulo.setForeground(new java.awt.Color(173, 181, 189));
+        lblSubtitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblSubtitulo.setText("Sistema de gestão da loja");
+
+        pnlCabecalho.add(lblSubtitulo);
+
+        getContentPane().add(pnlCabecalho, java.awt.BorderLayout.NORTH);
+        pnlCorpo.setBackground(new java.awt.Color(244, 246, 249));
+        pnlCorpo.setBorder(javax.swing.BorderFactory.createEmptyBorder(24, 32, 8, 32));
+        pnlCorpo.setLayout(new java.awt.BorderLayout());
+        pnlResumo.setOpaque(false);
+        pnlResumo.setLayout(new java.awt.GridLayout(1, 3, 16, 0));
+        pnlIndClientes.setBackground(new java.awt.Color(255, 255, 255));
+        pnlIndClientes.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(222, 226, 230)), javax.swing.BorderFactory.createEmptyBorder(14, 18, 14, 18)));
+        pnlIndClientes.setLayout(new java.awt.GridLayout(2, 1, 0, 2));
+        lblClientesTitulo.setFont(new java.awt.Font("Segoe UI", 0, 13));
+        lblClientesTitulo.setForeground(new java.awt.Color(108, 117, 125));
+        lblClientesTitulo.setText("Clientes ativos");
+
+        pnlIndClientes.add(lblClientesTitulo);
+        lblClientes.setFont(new java.awt.Font("Segoe UI", 1, 22));
+        lblClientes.setForeground(new java.awt.Color(33, 37, 41));
+        lblClientes.setText("-");
+
+        pnlIndClientes.add(lblClientes);
+
+        pnlResumo.add(pnlIndClientes);
+        pnlIndProdutos.setBackground(new java.awt.Color(255, 255, 255));
+        pnlIndProdutos.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(222, 226, 230)), javax.swing.BorderFactory.createEmptyBorder(14, 18, 14, 18)));
+        pnlIndProdutos.setLayout(new java.awt.GridLayout(2, 1, 0, 2));
+        lblProdutosTitulo.setFont(new java.awt.Font("Segoe UI", 0, 13));
+        lblProdutosTitulo.setForeground(new java.awt.Color(108, 117, 125));
+        lblProdutosTitulo.setText("Produtos cadastrados");
+
+        pnlIndProdutos.add(lblProdutosTitulo);
+        lblProdutos.setFont(new java.awt.Font("Segoe UI", 1, 22));
+        lblProdutos.setForeground(new java.awt.Color(33, 37, 41));
+        lblProdutos.setText("-");
+
+        pnlIndProdutos.add(lblProdutos);
+
+        pnlResumo.add(pnlIndProdutos);
+        pnlIndVendas.setBackground(new java.awt.Color(255, 255, 255));
+        pnlIndVendas.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(222, 226, 230)), javax.swing.BorderFactory.createEmptyBorder(14, 18, 14, 18)));
+        pnlIndVendas.setLayout(new java.awt.GridLayout(2, 1, 0, 2));
+        lblVendasTitulo.setFont(new java.awt.Font("Segoe UI", 0, 13));
+        lblVendasTitulo.setForeground(new java.awt.Color(108, 117, 125));
+        lblVendasTitulo.setText("Total em vendas");
+
+        pnlIndVendas.add(lblVendasTitulo);
+        lblVendas.setFont(new java.awt.Font("Segoe UI", 1, 22));
+        lblVendas.setForeground(new java.awt.Color(33, 37, 41));
+        lblVendas.setText("-");
+
+        pnlIndVendas.add(lblVendas);
+
+        pnlResumo.add(pnlIndVendas);
+
+        pnlCorpo.add(pnlResumo, java.awt.BorderLayout.NORTH);
+        pnlModulosBloco.setOpaque(false);
+        pnlModulosBloco.setLayout(new java.awt.BorderLayout());
+        lblModulos.setFont(new java.awt.Font("Segoe UI", 1, 14));
+        lblModulos.setForeground(new java.awt.Color(108, 117, 125));
+        lblModulos.setText("Selecione um módulo");
+        lblModulos.setBorder(javax.swing.BorderFactory.createEmptyBorder(24, 2, 10, 0));
+
+        pnlModulosBloco.add(lblModulos, java.awt.BorderLayout.NORTH);
+        pnlModulos.setOpaque(false);
+        pnlModulos.setLayout(new java.awt.GridLayout(1, 3, 16, 0));
+        btnClientes.setBackground(new java.awt.Color(13, 110, 253));
+        btnClientes.setFont(new java.awt.Font("Segoe UI", 0, 13));
+        btnClientes.setForeground(new java.awt.Color(255, 255, 255));
+        btnClientes.setText("<html><div style='text-align:center'><span style='font-size:16pt'><b>Clientes</b></span><br><br>Cadastrar e consultar clientes</div></html>");
+        btnClientes.setToolTipText("Atalho: Alt+C");
+        btnClientes.setBorderPainted(false);
+        btnClientes.setFocusPainted(false);
+        btnClientes.setOpaque(true);
+        btnClientes.setPreferredSize(new java.awt.Dimension(220, 150));
+        btnClientes.addActionListener(this::btnClientesActionPerformed);
+
+        pnlModulos.add(btnClientes);
+        btnProdutos.setBackground(new java.awt.Color(25, 135, 84));
+        btnProdutos.setFont(new java.awt.Font("Segoe UI", 0, 13));
+        btnProdutos.setForeground(new java.awt.Color(255, 255, 255));
+        btnProdutos.setText("<html><div style='text-align:center'><span style='font-size:16pt'><b>Produtos</b></span><br><br>Gerenciar produtos e estoque</div></html>");
+        btnProdutos.setToolTipText("Atalho: Alt+P");
+        btnProdutos.setBorderPainted(false);
+        btnProdutos.setFocusPainted(false);
+        btnProdutos.setOpaque(true);
+        btnProdutos.setPreferredSize(new java.awt.Dimension(220, 150));
+        btnProdutos.addActionListener(this::btnProdutosActionPerformed);
+
+        pnlModulos.add(btnProdutos);
+        btnVendas.setBackground(new java.awt.Color(214, 92, 0));
+        btnVendas.setFont(new java.awt.Font("Segoe UI", 0, 13));
+        btnVendas.setForeground(new java.awt.Color(255, 255, 255));
+        btnVendas.setText("<html><div style='text-align:center'><span style='font-size:16pt'><b>Vendas</b></span><br><br>Registrar vendas e ver histórico</div></html>");
+        btnVendas.setToolTipText("Atalho: Alt+V");
+        btnVendas.setBorderPainted(false);
+        btnVendas.setFocusPainted(false);
+        btnVendas.setOpaque(true);
+        btnVendas.setPreferredSize(new java.awt.Dimension(220, 150));
+        btnVendas.addActionListener(this::btnVendasActionPerformed);
+
+        pnlModulos.add(btnVendas);
+
+        pnlModulosBloco.add(pnlModulos, java.awt.BorderLayout.CENTER);
+
+        pnlCorpo.add(pnlModulosBloco, java.awt.BorderLayout.CENTER);
+
+        getContentPane().add(pnlCorpo, java.awt.BorderLayout.CENTER);
+        pnlRodape.setBackground(new java.awt.Color(244, 246, 249));
+        pnlRodape.setBorder(javax.swing.BorderFactory.createEmptyBorder(12, 32, 20, 32));
+        pnlRodape.setLayout(new java.awt.BorderLayout());
+        lblData.setFont(new java.awt.Font("Segoe UI", 0, 12));
+        lblData.setForeground(new java.awt.Color(108, 117, 125));
+
+        pnlRodape.add(lblData, java.awt.BorderLayout.WEST);
+        btnSair.setBackground(new java.awt.Color(108, 117, 125));
+        btnSair.setFont(new java.awt.Font("Segoe UI", 1, 13));
+        btnSair.setForeground(new java.awt.Color(255, 255, 255));
+        btnSair.setText("Sair");
+        btnSair.setBorderPainted(false);
+        btnSair.setFocusPainted(false);
+        btnSair.setOpaque(true);
+        btnSair.setPreferredSize(new java.awt.Dimension(100, 34));
+        btnSair.addActionListener(this::btnSairActionPerformed);
+
+        pnlRodape.add(btnSair, java.awt.BorderLayout.EAST);
+
+        getContentPane().add(pnlRodape, java.awt.BorderLayout.SOUTH);
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
+        abrirTela(TelaClientes::new, "Clientes");
+    }//GEN-LAST:event_btnClientesActionPerformed
+
+    private void btnProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProdutosActionPerformed
+        abrirTela(TelaProdutos::new, "Produtos");
+    }//GEN-LAST:event_btnProdutosActionPerformed
+
+    private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
+        abrirTela(TelaVendas::new, "Vendas");
+    }//GEN-LAST:event_btnVendasActionPerformed
+
+    private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
+        confirmarSaida();
+    }//GEN-LAST:event_btnSairActionPerformed
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnClientes;
+    private javax.swing.JButton btnProdutos;
+    private javax.swing.JButton btnSair;
+    private javax.swing.JButton btnVendas;
+    private javax.swing.JLabel lblClientes;
+    private javax.swing.JLabel lblClientesTitulo;
+    private javax.swing.JLabel lblData;
+    private javax.swing.JLabel lblModulos;
+    private javax.swing.JLabel lblProdutos;
+    private javax.swing.JLabel lblProdutosTitulo;
+    private javax.swing.JLabel lblSubtitulo;
+    private javax.swing.JLabel lblTitulo;
+    private javax.swing.JLabel lblVendas;
+    private javax.swing.JLabel lblVendasTitulo;
+    private javax.swing.JPanel pnlCabecalho;
+    private javax.swing.JPanel pnlCorpo;
+    private javax.swing.JPanel pnlIndClientes;
+    private javax.swing.JPanel pnlIndProdutos;
+    private javax.swing.JPanel pnlIndVendas;
+    private javax.swing.JPanel pnlModulos;
+    private javax.swing.JPanel pnlModulosBloco;
+    private javax.swing.JPanel pnlResumo;
+    private javax.swing.JPanel pnlRodape;
+    // End of variables declaration//GEN-END:variables
 }

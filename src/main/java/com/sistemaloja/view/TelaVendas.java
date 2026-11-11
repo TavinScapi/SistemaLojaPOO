@@ -6,7 +6,6 @@ import com.sistemaloja.dao.VendaDAO;
 import com.sistemaloja.model.Cliente;
 import com.sistemaloja.model.Produto;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -28,7 +27,6 @@ import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 public class TelaVendas extends javax.swing.JFrame {
@@ -55,7 +53,6 @@ public class TelaVendas extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setMinimumSize(new Dimension(1150, 680));
 
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -63,6 +60,7 @@ public class TelaVendas extends javax.swing.JFrame {
             }
         });
 
+        Estilo.aplicarHover(btnVoltar, btnNovoCliente, btnAdicionar, btnRemover, btnLimpar, btnFinalizar);
         configurarTabelaProdutos();
         configurarTabelaCarrinho();
         configurarTabelaHistorico();
@@ -111,17 +109,10 @@ public class TelaVendas extends javax.swing.JFrame {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
         tabelaProdutos.setModel(modeloProdutos);
-        tabelaProdutos.setRowHeight(26);
-        tabelaProdutos.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        tabelaProdutos.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
+        Estilo.estilizarTabela(tabelaProdutos);
         tabelaProdutos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tabelaProdutos.setAutoCreateRowSorter(true);
-        tabelaProdutos.setFillsViewportHeight(true);
-
-        DefaultTableCellRenderer right = new DefaultTableCellRenderer();
-        right.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
-        tabelaProdutos.getColumnModel().getColumn(2).setCellRenderer(right);
-        tabelaProdutos.getColumnModel().getColumn(3).setCellRenderer(right);
+        Estilo.alinharDireita(tabelaProdutos, 2, 3);
     }
 
     private void configurarTabelaCarrinho() {
@@ -130,17 +121,9 @@ public class TelaVendas extends javax.swing.JFrame {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
         tabelaCarrinho.setModel(modeloCarrinho);
-        tabelaCarrinho.setRowHeight(26);
-        tabelaCarrinho.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        tabelaCarrinho.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
+        Estilo.estilizarTabela(tabelaCarrinho);
         tabelaCarrinho.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        tabelaCarrinho.setFillsViewportHeight(true);
-
-        DefaultTableCellRenderer right = new DefaultTableCellRenderer();
-        right.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
-        tabelaCarrinho.getColumnModel().getColumn(2).setCellRenderer(right);
-        tabelaCarrinho.getColumnModel().getColumn(3).setCellRenderer(right);
-        tabelaCarrinho.getColumnModel().getColumn(4).setCellRenderer(right);
+        Estilo.alinharDireita(tabelaCarrinho, 2, 3, 4);
     }
 
     private void configurarTabelaHistorico() {
@@ -149,16 +132,9 @@ public class TelaVendas extends javax.swing.JFrame {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
         tabelaHistorico.setModel(modeloHistorico);
-        tabelaHistorico.setRowHeight(24);
-        tabelaHistorico.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        tabelaHistorico.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+        Estilo.estilizarTabela(tabelaHistorico);
         tabelaHistorico.setAutoCreateRowSorter(true);
-        tabelaHistorico.setFillsViewportHeight(true);
-
-        DefaultTableCellRenderer right = new DefaultTableCellRenderer();
-        right.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
-        tabelaHistorico.getColumnModel().getColumn(3).setCellRenderer(right);
-        tabelaHistorico.getColumnModel().getColumn(4).setCellRenderer(right);
+        Estilo.alinharDireita(tabelaHistorico, 3, 4);
     }
 
     private void configurarAtalhos() {
@@ -397,261 +373,297 @@ public class TelaVendas extends javax.swing.JFrame {
     }
 
     @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
+
+        pnlCabecalho = new javax.swing.JPanel();
+        pnlTitulos = new javax.swing.JPanel();
+        lblMarca = new javax.swing.JLabel();
         lblTitulo = new javax.swing.JLabel();
+        pnlAcoesCabecalho = new javax.swing.JPanel();
         btnVoltar = new javax.swing.JButton();
-        lblCliente = new javax.swing.JLabel();
-        cbCliente = new javax.swing.JComboBox<>();
-        btnNovoCliente = new javax.swing.JButton();
+        pnlCorpo = new javax.swing.JPanel();
         pnlEsquerdo = new javax.swing.JPanel();
         pnlProdutos = new javax.swing.JPanel();
+        pnlProdutosTopo = new javax.swing.JPanel();
+        lblProdutosTitulo = new javax.swing.JLabel();
+        pnlBuscaProduto = new javax.swing.JPanel();
         lblBusca = new javax.swing.JLabel();
         txtBuscaProduto = new javax.swing.JTextField();
         btnAdicionar = new javax.swing.JButton();
         scrollProdutos = new javax.swing.JScrollPane();
         tabelaProdutos = new javax.swing.JTable();
-        pnlCarrinho = new javax.swing.JPanel();
-        lblCarrinho = new javax.swing.JLabel();
-        scrollCarrinho = new javax.swing.JScrollPane();
-        tabelaCarrinho = new javax.swing.JTable();
-        btnRemover = new javax.swing.JButton();
-        btnLimpar = new javax.swing.JButton();
-        lblTotalTitulo = new javax.swing.JLabel();
-        lblTotalValor = new javax.swing.JLabel();
-        btnFinalizar = new javax.swing.JButton();
         pnlHistorico = new javax.swing.JPanel();
+        lblHistoricoTitulo = new javax.swing.JLabel();
         scrollHistorico = new javax.swing.JScrollPane();
         tabelaHistorico = new javax.swing.JTable();
+        pnlDireito = new javax.swing.JPanel();
+        pnlClienteBarra = new javax.swing.JPanel();
+        lblCliente = new javax.swing.JLabel();
+        cbCliente = new javax.swing.JComboBox<>();
+        btnNovoCliente = new javax.swing.JButton();
+        pnlCarrinho = new javax.swing.JPanel();
+        pnlCarrinhoTopo = new javax.swing.JPanel();
+        lblCarrinho = new javax.swing.JLabel();
+        lblCarrinhoDica = new javax.swing.JLabel();
+        scrollCarrinho = new javax.swing.JScrollPane();
+        tabelaCarrinho = new javax.swing.JTable();
+        pnlCarrinhoRodape = new javax.swing.JPanel();
+        pnlTotal = new javax.swing.JPanel();
+        lblTotalTitulo = new javax.swing.JLabel();
+        lblTotalValor = new javax.swing.JLabel();
+        pnlCarrinhoBotoes = new javax.swing.JPanel();
+        btnRemover = new javax.swing.JButton();
+        btnLimpar = new javax.swing.JButton();
+        btnFinalizar = new javax.swing.JButton();
 
-        setTitle("Vendas - " + TelaPrincipal.NOME_LOJA);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("Vendas - OctoMax");
+        getContentPane().setLayout(new java.awt.BorderLayout());
 
-        lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 20));
+        pnlCabecalho.setBackground(new java.awt.Color(24, 36, 56));
+        pnlCabecalho.setBorder(javax.swing.BorderFactory.createEmptyBorder(18, 32, 18, 32));
+        pnlCabecalho.setLayout(new java.awt.BorderLayout());
+        pnlTitulos.setOpaque(false);
+        pnlTitulos.setLayout(new java.awt.GridLayout(2, 1, 0, 2));
+        lblMarca.setFont(new java.awt.Font("Segoe UI", 0, 12));
+        lblMarca.setForeground(new java.awt.Color(173, 181, 189));
+        lblMarca.setText("OctoMax");
+
+        pnlTitulos.add(lblMarca);
+        lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 22));
+        lblTitulo.setForeground(new java.awt.Color(255, 255, 255));
         lblTitulo.setText("Registrar venda");
 
+        pnlTitulos.add(lblTitulo);
+
+        pnlCabecalho.add(pnlTitulos, java.awt.BorderLayout.WEST);
+        pnlAcoesCabecalho.setOpaque(false);
+        pnlAcoesCabecalho.setLayout(new java.awt.GridBagLayout());
+        btnVoltar.setBackground(new java.awt.Color(52, 68, 94));
+        btnVoltar.setFont(new java.awt.Font("Segoe UI", 1, 13));
+        btnVoltar.setForeground(new java.awt.Color(255, 255, 255));
         btnVoltar.setText("← Voltar");
+        btnVoltar.setBorderPainted(false);
+        btnVoltar.setFocusPainted(false);
+        btnVoltar.setOpaque(true);
+        btnVoltar.setPreferredSize(new java.awt.Dimension(110, 36));
         btnVoltar.addActionListener(this::btnVoltarActionPerformed);
 
-        lblCliente.setFont(new java.awt.Font("Segoe UI", 0, 12));
-        lblCliente.setText("Cliente:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        pnlAcoesCabecalho.add(btnVoltar, gridBagConstraints);
 
-        cbCliente.setFont(new java.awt.Font("Segoe UI", 0, 13));
+        pnlCabecalho.add(pnlAcoesCabecalho, java.awt.BorderLayout.EAST);
 
-        btnNovoCliente.setText("+ Novo cliente");
-        btnNovoCliente.addActionListener(this::btnNovoClienteActionPerformed);
+        getContentPane().add(pnlCabecalho, java.awt.BorderLayout.NORTH);
+        pnlCorpo.setBackground(new java.awt.Color(244, 246, 249));
+        pnlCorpo.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 32, 24, 32));
+        pnlCorpo.setLayout(new java.awt.BorderLayout(20, 0));
+        pnlEsquerdo.setOpaque(false);
+        pnlEsquerdo.setLayout(new java.awt.BorderLayout(0, 16));
+        pnlProdutos.setBackground(new java.awt.Color(255, 255, 255));
+        pnlProdutos.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(222, 226, 230)), javax.swing.BorderFactory.createEmptyBorder(18, 20, 18, 20)));
+        pnlProdutos.setLayout(new java.awt.BorderLayout(0, 10));
+        pnlProdutosTopo.setOpaque(false);
+        pnlProdutosTopo.setLayout(new java.awt.BorderLayout(0, 8));
+        lblProdutosTitulo.setFont(new java.awt.Font("Segoe UI", 1, 15));
+        lblProdutosTitulo.setForeground(new java.awt.Color(33, 37, 41));
+        lblProdutosTitulo.setText("Produtos disponíveis");
 
-        pnlEsquerdo.setLayout(new java.awt.BorderLayout(0, 10));
-
-        pnlProdutos.setBorder(javax.swing.BorderFactory.createTitledBorder("Produtos disponíveis"));
-
-        lblBusca.setFont(new java.awt.Font("Segoe UI", 0, 12));
+        pnlProdutosTopo.add(lblProdutosTitulo, java.awt.BorderLayout.NORTH);
+        pnlBuscaProduto.setOpaque(false);
+        pnlBuscaProduto.setLayout(new java.awt.BorderLayout(10, 0));
+        lblBusca.setFont(new java.awt.Font("Segoe UI", 1, 12));
+        lblBusca.setForeground(new java.awt.Color(108, 117, 125));
         lblBusca.setText("Buscar produto (Ctrl+F):");
 
+        pnlBuscaProduto.add(lblBusca, java.awt.BorderLayout.WEST);
         txtBuscaProduto.setFont(new java.awt.Font("Segoe UI", 0, 14));
 
+        pnlBuscaProduto.add(txtBuscaProduto, java.awt.BorderLayout.CENTER);
+        btnAdicionar.setBackground(new java.awt.Color(25, 135, 84));
+        btnAdicionar.setFont(new java.awt.Font("Segoe UI", 1, 13));
+        btnAdicionar.setForeground(new java.awt.Color(255, 255, 255));
         btnAdicionar.setText("Adicionar ao carrinho");
+        btnAdicionar.setBorderPainted(false);
+        btnAdicionar.setFocusPainted(false);
+        btnAdicionar.setOpaque(true);
+        btnAdicionar.setPreferredSize(new java.awt.Dimension(200, 34));
         btnAdicionar.addActionListener(this::btnAdicionarActionPerformed);
 
-        tabelaProdutos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {},
-            new String [] {"Código", "Produto", "Preço", "Estoque"}
-        ));
+        pnlBuscaProduto.add(btnAdicionar, java.awt.BorderLayout.EAST);
+
+        pnlProdutosTopo.add(pnlBuscaProduto, java.awt.BorderLayout.CENTER);
+
+        pnlProdutos.add(pnlProdutosTopo, java.awt.BorderLayout.NORTH);
+
         scrollProdutos.setViewportView(tabelaProdutos);
 
-        javax.swing.GroupLayout pnlProdutosLayout = new javax.swing.GroupLayout(pnlProdutos);
-        pnlProdutos.setLayout(pnlProdutosLayout);
-        pnlProdutosLayout.setHorizontalGroup(
-            pnlProdutosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlProdutosLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlProdutosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(scrollProdutos)
-                    .addGroup(pnlProdutosLayout.createSequentialGroup()
-                        .addGroup(pnlProdutosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblBusca)
-                            .addGroup(pnlProdutosLayout.createSequentialGroup()
-                                .addComponent(txtBuscaProduto, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        pnlProdutosLayout.setVerticalGroup(
-            pnlProdutosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlProdutosLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblBusca)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlProdutosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtBuscaProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(scrollProdutos, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        pnlCarrinho.setBorder(javax.swing.BorderFactory.createTitledBorder("Carrinho"));
-
-        lblCarrinho.setFont(new java.awt.Font("Segoe UI", 0, 12));
-        lblCarrinho.setText("Itens adicionados (duplo clique na lista de produtos adiciona automaticamente)");
-
-        tabelaCarrinho.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {},
-            new String [] {"Código", "Produto", "Qtd", "Preço Unit.", "Subtotal"}
-        ));
-        scrollCarrinho.setViewportView(tabelaCarrinho);
-
-        btnRemover.setText("Remover item");
-        btnRemover.addActionListener(this::btnRemoverActionPerformed);
-
-        btnLimpar.setText("Limpar carrinho");
-        btnLimpar.addActionListener(this::btnLimparActionPerformed);
-
-        lblTotalTitulo.setFont(new java.awt.Font("Segoe UI", 1, 14));
-        lblTotalTitulo.setText("TOTAL:");
-
-        lblTotalValor.setFont(new java.awt.Font("Segoe UI", 1, 22));
-        lblTotalValor.setText("R$ 0,00");
-
-        btnFinalizar.setFont(new java.awt.Font("Segoe UI", 1, 14));
-        btnFinalizar.setText("Finalizar venda (Ctrl+Enter)");
-        btnFinalizar.addActionListener(this::btnFinalizarActionPerformed);
-
-        javax.swing.GroupLayout pnlCarrinhoLayout = new javax.swing.GroupLayout(pnlCarrinho);
-        pnlCarrinho.setLayout(pnlCarrinhoLayout);
-        pnlCarrinhoLayout.setHorizontalGroup(
-            pnlCarrinhoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlCarrinhoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlCarrinhoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(scrollCarrinho)
-                    .addComponent(lblCarrinho, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlCarrinhoLayout.createSequentialGroup()
-                        .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblTotalTitulo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lblTotalValor))
-                    .addComponent(btnFinalizar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        pnlCarrinhoLayout.setVerticalGroup(
-            pnlCarrinhoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlCarrinhoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblCarrinho)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scrollCarrinho, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(pnlCarrinhoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblTotalTitulo)
-                    .addComponent(lblTotalValor))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
+        pnlProdutos.add(scrollProdutos, java.awt.BorderLayout.CENTER);
 
         pnlEsquerdo.add(pnlProdutos, java.awt.BorderLayout.CENTER);
-        pnlEsquerdo.add(pnlCarrinho, java.awt.BorderLayout.SOUTH);
+        pnlHistorico.setBackground(new java.awt.Color(255, 255, 255));
+        pnlHistorico.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(222, 226, 230)), javax.swing.BorderFactory.createEmptyBorder(18, 20, 18, 20)));
+        pnlHistorico.setPreferredSize(new java.awt.Dimension(400, 210));
+        pnlHistorico.setLayout(new java.awt.BorderLayout(0, 10));
+        lblHistoricoTitulo.setFont(new java.awt.Font("Segoe UI", 1, 15));
+        lblHistoricoTitulo.setForeground(new java.awt.Color(33, 37, 41));
+        lblHistoricoTitulo.setText("Histórico de vendas");
 
-        pnlHistorico.setBorder(javax.swing.BorderFactory.createTitledBorder("Histórico de vendas"));
+        pnlHistorico.add(lblHistoricoTitulo, java.awt.BorderLayout.NORTH);
 
-        tabelaHistorico.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {},
-            new String [] {"Código", "Cliente", "Produto", "Qtd", "Total", "Data"}
-        ));
         scrollHistorico.setViewportView(tabelaHistorico);
 
-        javax.swing.GroupLayout pnlHistoricoLayout = new javax.swing.GroupLayout(pnlHistorico);
-        pnlHistorico.setLayout(pnlHistoricoLayout);
-        pnlHistoricoLayout.setHorizontalGroup(
-            pnlHistoricoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlHistoricoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(scrollHistorico, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        pnlHistoricoLayout.setVerticalGroup(
-            pnlHistoricoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlHistoricoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(scrollHistorico)
-                .addContainerGap())
-        );
+        pnlHistorico.add(scrollHistorico, java.awt.BorderLayout.CENTER);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnVoltar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblCliente)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnNovoCliente))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(pnlEsquerdo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(pnlHistorico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnVoltar)
-                    .addComponent(lblTitulo)
-                    .addComponent(lblCliente)
-                    .addComponent(cbCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnNovoCliente))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlEsquerdo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlHistorico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
+        pnlEsquerdo.add(pnlHistorico, java.awt.BorderLayout.SOUTH);
+
+        pnlCorpo.add(pnlEsquerdo, java.awt.BorderLayout.CENTER);
+        pnlDireito.setOpaque(false);
+        pnlDireito.setPreferredSize(new java.awt.Dimension(430, 500));
+        pnlDireito.setLayout(new java.awt.BorderLayout(0, 16));
+        pnlClienteBarra.setBackground(new java.awt.Color(255, 255, 255));
+        pnlClienteBarra.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(222, 226, 230)), javax.swing.BorderFactory.createEmptyBorder(18, 20, 18, 20)));
+        pnlClienteBarra.setLayout(new java.awt.BorderLayout(8, 8));
+        lblCliente.setFont(new java.awt.Font("Segoe UI", 1, 15));
+        lblCliente.setForeground(new java.awt.Color(33, 37, 41));
+        lblCliente.setText("Cliente");
+
+        pnlClienteBarra.add(lblCliente, java.awt.BorderLayout.NORTH);
+        cbCliente.setFont(new java.awt.Font("Segoe UI", 0, 14));
+        cbCliente.setPreferredSize(new java.awt.Dimension(240, 34));
+
+        pnlClienteBarra.add(cbCliente, java.awt.BorderLayout.CENTER);
+        btnNovoCliente.setBackground(new java.awt.Color(13, 110, 253));
+        btnNovoCliente.setFont(new java.awt.Font("Segoe UI", 1, 13));
+        btnNovoCliente.setForeground(new java.awt.Color(255, 255, 255));
+        btnNovoCliente.setText("+ Novo");
+        btnNovoCliente.setBorderPainted(false);
+        btnNovoCliente.setFocusPainted(false);
+        btnNovoCliente.setOpaque(true);
+        btnNovoCliente.setPreferredSize(new java.awt.Dimension(90, 34));
+        btnNovoCliente.addActionListener(this::btnNovoClienteActionPerformed);
+
+        pnlClienteBarra.add(btnNovoCliente, java.awt.BorderLayout.EAST);
+
+        pnlDireito.add(pnlClienteBarra, java.awt.BorderLayout.NORTH);
+        pnlCarrinho.setBackground(new java.awt.Color(255, 255, 255));
+        pnlCarrinho.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(222, 226, 230)), javax.swing.BorderFactory.createEmptyBorder(18, 20, 18, 20)));
+        pnlCarrinho.setLayout(new java.awt.BorderLayout(0, 10));
+        pnlCarrinhoTopo.setOpaque(false);
+        pnlCarrinhoTopo.setLayout(new java.awt.GridLayout(2, 1, 0, 2));
+        lblCarrinho.setFont(new java.awt.Font("Segoe UI", 1, 15));
+        lblCarrinho.setForeground(new java.awt.Color(33, 37, 41));
+        lblCarrinho.setText("Carrinho");
+
+        pnlCarrinhoTopo.add(lblCarrinho);
+        lblCarrinhoDica.setFont(new java.awt.Font("Segoe UI", 0, 12));
+        lblCarrinhoDica.setForeground(new java.awt.Color(108, 117, 125));
+        lblCarrinhoDica.setText("Dê um duplo clique em um produto para adicioná-lo");
+
+        pnlCarrinhoTopo.add(lblCarrinhoDica);
+
+        pnlCarrinho.add(pnlCarrinhoTopo, java.awt.BorderLayout.NORTH);
+
+        scrollCarrinho.setViewportView(tabelaCarrinho);
+
+        pnlCarrinho.add(scrollCarrinho, java.awt.BorderLayout.CENTER);
+        pnlCarrinhoRodape.setOpaque(false);
+        pnlCarrinhoRodape.setLayout(new java.awt.BorderLayout(0, 10));
+        pnlTotal.setOpaque(false);
+        pnlTotal.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 10, 0));
+        lblTotalTitulo.setFont(new java.awt.Font("Segoe UI", 1, 14));
+        lblTotalTitulo.setForeground(new java.awt.Color(108, 117, 125));
+        lblTotalTitulo.setText("TOTAL:");
+
+        pnlTotal.add(lblTotalTitulo);
+        lblTotalValor.setFont(new java.awt.Font("Segoe UI", 1, 24));
+        lblTotalValor.setForeground(new java.awt.Color(33, 37, 41));
+        lblTotalValor.setText("R$ 0,00");
+
+        pnlTotal.add(lblTotalValor);
+
+        pnlCarrinhoRodape.add(pnlTotal, java.awt.BorderLayout.NORTH);
+        pnlCarrinhoBotoes.setOpaque(false);
+        pnlCarrinhoBotoes.setLayout(new java.awt.GridLayout(1, 2, 8, 0));
+        btnRemover.setBackground(new java.awt.Color(108, 117, 125));
+        btnRemover.setFont(new java.awt.Font("Segoe UI", 1, 13));
+        btnRemover.setForeground(new java.awt.Color(255, 255, 255));
+        btnRemover.setText("Remover item");
+        btnRemover.setBorderPainted(false);
+        btnRemover.setFocusPainted(false);
+        btnRemover.setOpaque(true);
+        btnRemover.setPreferredSize(new java.awt.Dimension(120, 36));
+        btnRemover.addActionListener(this::btnRemoverActionPerformed);
+
+        pnlCarrinhoBotoes.add(btnRemover);
+        btnLimpar.setBackground(new java.awt.Color(220, 53, 69));
+        btnLimpar.setFont(new java.awt.Font("Segoe UI", 1, 13));
+        btnLimpar.setForeground(new java.awt.Color(255, 255, 255));
+        btnLimpar.setText("Limpar carrinho");
+        btnLimpar.setBorderPainted(false);
+        btnLimpar.setFocusPainted(false);
+        btnLimpar.setOpaque(true);
+        btnLimpar.setPreferredSize(new java.awt.Dimension(120, 36));
+        btnLimpar.addActionListener(this::btnLimparActionPerformed);
+
+        pnlCarrinhoBotoes.add(btnLimpar);
+
+        pnlCarrinhoRodape.add(pnlCarrinhoBotoes, java.awt.BorderLayout.CENTER);
+        btnFinalizar.setBackground(new java.awt.Color(214, 92, 0));
+        btnFinalizar.setFont(new java.awt.Font("Segoe UI", 1, 13));
+        btnFinalizar.setForeground(new java.awt.Color(255, 255, 255));
+        btnFinalizar.setText("Finalizar venda (Ctrl+Enter)");
+        btnFinalizar.setBorderPainted(false);
+        btnFinalizar.setFocusPainted(false);
+        btnFinalizar.setOpaque(true);
+        btnFinalizar.setPreferredSize(new java.awt.Dimension(250, 44));
+        btnFinalizar.addActionListener(this::btnFinalizarActionPerformed);
+
+        pnlCarrinhoRodape.add(btnFinalizar, java.awt.BorderLayout.SOUTH);
+
+        pnlCarrinho.add(pnlCarrinhoRodape, java.awt.BorderLayout.SOUTH);
+
+        pnlDireito.add(pnlCarrinho, java.awt.BorderLayout.CENTER);
+
+        pnlCorpo.add(pnlDireito, java.awt.BorderLayout.EAST);
+
+        getContentPane().add(pnlCorpo, java.awt.BorderLayout.CENTER);
 
         pack();
-    }
+    }// </editor-fold>//GEN-END:initComponents
 
-    private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
         if (confirmarSaida()) voltarParaPrincipal();
-    }
+    }//GEN-LAST:event_btnVoltarActionPerformed
 
-    private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
         adicionarAoCarrinho();
-    }
+    }//GEN-LAST:event_btnAdicionarActionPerformed
 
-    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
         removerDoCarrinho();
-    }
+    }//GEN-LAST:event_btnRemoverActionPerformed
 
-    private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
         limparCarrinho();
-    }
+    }//GEN-LAST:event_btnLimparActionPerformed
 
-    private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarActionPerformed
         finalizarVenda();
-    }
+    }//GEN-LAST:event_btnFinalizarActionPerformed
 
-    private void btnNovoClienteActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnNovoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoClienteActionPerformed
         if (confirmarSaida()) {
             new TelaClientes().setVisible(true);
             dispose();
         }
-    }
+    }//GEN-LAST:event_btnNovoClienteActionPerformed
 
+    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdicionar;
     private javax.swing.JButton btnFinalizar;
     private javax.swing.JButton btnLimpar;
@@ -661,14 +673,30 @@ public class TelaVendas extends javax.swing.JFrame {
     private javax.swing.JComboBox<Cliente> cbCliente;
     private javax.swing.JLabel lblBusca;
     private javax.swing.JLabel lblCarrinho;
+    private javax.swing.JLabel lblCarrinhoDica;
     private javax.swing.JLabel lblCliente;
+    private javax.swing.JLabel lblHistoricoTitulo;
+    private javax.swing.JLabel lblMarca;
+    private javax.swing.JLabel lblProdutosTitulo;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblTotalTitulo;
     private javax.swing.JLabel lblTotalValor;
+    private javax.swing.JPanel pnlAcoesCabecalho;
+    private javax.swing.JPanel pnlBuscaProduto;
+    private javax.swing.JPanel pnlCabecalho;
     private javax.swing.JPanel pnlCarrinho;
+    private javax.swing.JPanel pnlCarrinhoBotoes;
+    private javax.swing.JPanel pnlCarrinhoRodape;
+    private javax.swing.JPanel pnlCarrinhoTopo;
+    private javax.swing.JPanel pnlClienteBarra;
+    private javax.swing.JPanel pnlCorpo;
+    private javax.swing.JPanel pnlDireito;
     private javax.swing.JPanel pnlEsquerdo;
     private javax.swing.JPanel pnlHistorico;
     private javax.swing.JPanel pnlProdutos;
+    private javax.swing.JPanel pnlProdutosTopo;
+    private javax.swing.JPanel pnlTitulos;
+    private javax.swing.JPanel pnlTotal;
     private javax.swing.JScrollPane scrollCarrinho;
     private javax.swing.JScrollPane scrollHistorico;
     private javax.swing.JScrollPane scrollProdutos;
@@ -676,6 +704,7 @@ public class TelaVendas extends javax.swing.JFrame {
     private javax.swing.JTable tabelaHistorico;
     private javax.swing.JTable tabelaProdutos;
     private javax.swing.JTextField txtBuscaProduto;
+    // End of variables declaration//GEN-END:variables
 
     private static class ItemCarrinho {
         final Produto produto;
