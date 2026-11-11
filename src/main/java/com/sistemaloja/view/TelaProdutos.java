@@ -27,8 +27,9 @@ public class TelaProdutos extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger
             = java.util.logging.Logger.getLogger(TelaProdutos.class.getName());
 
-    private static final Locale BR = new Locale("pt", "BR");
-    private static final NumberFormat MOEDA = NumberFormat.getCurrencyInstance(BR);
+    private static final NumberFormat MOEDA = NumberFormat.getCurrencyInstance(Locale.of("pt", "BR"));
+
+    private List<Produto> produtos = List.of();
 
     private boolean modoEdicao = false;
     private int idProdutoSelecionado = -1;
@@ -104,15 +105,6 @@ public class TelaProdutos extends javax.swing.JFrame {
         tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tabela.setShowGrid(false);
 
-        tabela.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2 && tabela.getSelectedRow() != -1) {
-                    selecionarProduto();
-                }
-            }
-        });
-
         tabela.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && tabela.getSelectedRow() != -1) {
                 selecionarProduto();
@@ -122,13 +114,8 @@ public class TelaProdutos extends javax.swing.JFrame {
 
     private void carregarProdutos() {
         try {
-            List<Produto> produtos = new ProdutoDAO().listarTodos();
-            modeloTabela.setRowCount(0);
-            for (Produto p : produtos) {
-                modeloTabela.addRow(new Object[]{
-                    p.getId(), p.getNome(), MOEDA.format(p.getPreco()), p.getEstoque()
-                });
-            }
+            produtos = new ProdutoDAO().listarAtivos();
+            filtrarTabela();
         } catch (SQLException e) {
             mostrarErro("Erro ao carregar produtos", e);
         }
@@ -136,23 +123,21 @@ public class TelaProdutos extends javax.swing.JFrame {
 
     private void filtrarTabela() {
         String filtro = txtBusca.getText().trim().toLowerCase();
-        if (filtro.isEmpty()) {
-            carregarProdutos();
-            return;
-        }
-        try {
-            List<Produto> produtos = new ProdutoDAO().listarTodos();
-            modeloTabela.setRowCount(0);
-            for (Produto p : produtos) {
-                if (p.getNome().toLowerCase().contains(filtro)) {
-                    modeloTabela.addRow(new Object[]{
-                        p.getId(), p.getNome(), MOEDA.format(p.getPreco()), p.getEstoque()
-                    });
-                }
+        modeloTabela.setRowCount(0);
+        for (Produto p : produtos) {
+            if (p.getNome().toLowerCase().contains(filtro)) {
+                modeloTabela.addRow(new Object[]{
+                    p.getId(), p.getNome(), MOEDA.format(p.getPreco()), p.getEstoque()
+                });
             }
-        } catch (SQLException e) {
-            mostrarErro("Erro ao filtrar produtos", e);
         }
+    }
+
+    private Produto buscarProduto(int id) {
+        for (Produto p : produtos) {
+            if (p.getId() == id) return p;
+        }
+        return null;
     }
 
     private void selecionarProduto() {
@@ -160,18 +145,14 @@ public class TelaProdutos extends javax.swing.JFrame {
         if (linha == -1) return;
         if (modoEdicao && !confirmarDescarte()) return;
 
-        idProdutoSelecionado = Integer.parseInt(tabela.getValueAt(linha, 0).toString());
-        txtCodigo.setText(String.valueOf(idProdutoSelecionado));
-        txtNome.setText(tabela.getValueAt(linha, 1).toString());
+        Produto p = buscarProduto((Integer) tabela.getValueAt(linha, 0));
+        if (p == null) return;
 
-        String precoFormatado = tabela.getValueAt(linha, 2).toString();
-        String precoBruto = precoFormatado
-                .replace("R$", "")
-                .replace(".", "")
-                .replace(",", ".")
-                .trim();
-        txtPreco.setText(precoBruto);
-        txtEstoque.setText(tabela.getValueAt(linha, 3).toString());
+        idProdutoSelecionado = p.getId();
+        txtCodigo.setText(String.valueOf(p.getId()));
+        txtNome.setText(p.getNome());
+        txtPreco.setText(String.format(Locale.ROOT, "%.2f", p.getPreco()).replace('.', ','));
+        txtEstoque.setText(String.valueOf(p.getEstoque()));
         entrarModoVisualizacao();
     }
 
@@ -276,8 +257,7 @@ public class TelaProdutos extends javax.swing.JFrame {
         scrollTabela = new javax.swing.JScrollPane();
         tabela = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Produtos - Sistema de Loja");
+        setTitle("Produtos - " + TelaPrincipal.NOME_LOJA);
 
         lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 20));
         lblTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -534,7 +514,7 @@ public class TelaProdutos extends javax.swing.JFrame {
             return;
         }
         int r = JOptionPane.showConfirmDialog(this,
-                "Deseja realmente excluir este produto?",
+                "Deseja realmente excluir este produto?\nO histórico de vendas será preservado.",
                 "Confirmar exclusão",
                 JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
         if (r != JOptionPane.YES_OPTION) return;
@@ -558,20 +538,6 @@ public class TelaProdutos extends javax.swing.JFrame {
         if (confirmarDescarte()) {
             voltarParaPrincipal();
         }
-    }
-
-    public static void main(String args[]) {
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        java.awt.EventQueue.invokeLater(() -> new TelaProdutos().setVisible(true));
     }
 
     private javax.swing.JButton btnCadastrar;

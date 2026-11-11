@@ -31,12 +31,7 @@ public class ClienteService {
         dao.inativar(id);
     }
 
-    public void reativar(int id) throws SQLException, RegraNegocioException {
-        dao.reativar(id);
-    }
-
     public List<Cliente> listarAtivos()         throws SQLException { return dao.listarAtivos(); }
-    public List<Cliente> listarInativos()       throws SQLException { return dao.listarInativos(); }
     public Cliente buscarPorId(int id)          throws SQLException { return dao.buscarPorId(id); }
 
     public List<Cliente> buscar(String termo) throws SQLException {

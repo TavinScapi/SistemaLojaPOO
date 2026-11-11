@@ -1,4 +1,2 @@
-db.properties
 target/
-db.properties.aiven.bak
-loja.db
+octomax.db

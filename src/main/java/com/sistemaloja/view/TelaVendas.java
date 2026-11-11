@@ -16,9 +16,13 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.text.NumberFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
@@ -31,8 +35,8 @@ public class TelaVendas extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger
             = java.util.logging.Logger.getLogger(TelaVendas.class.getName());
 
-    private static final Locale BR = new Locale("pt", "BR");
-    private static final NumberFormat MOEDA = NumberFormat.getCurrencyInstance(BR);
+    private static final NumberFormat MOEDA = NumberFormat.getCurrencyInstance(Locale.of("pt", "BR"));
+    private static final DateTimeFormatter FMT_DATA = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     private List<Produto> produtos;
 
@@ -181,7 +185,7 @@ public class TelaVendas extends javax.swing.JFrame {
         try {
             cbCliente.removeAllItems();
             for (Cliente c : new ClienteDAO().listarAtivos()) {
-                cbCliente.addItem(new ItemCombo(c.getId(), c.getNome()));
+                cbCliente.addItem(c);
             }
         } catch (SQLException e) {
             mostrarErro("Não foi possível carregar os clientes.", e);
@@ -213,12 +217,9 @@ public class TelaVendas extends javax.swing.JFrame {
     private void carregarHistorico() {
         try {
             modeloHistorico.setRowCount(0);
-            List<Object[]> vendas = new VendaDAO().listarTodas();
-            if (vendas == null) return;
-            for (Object[] venda : vendas) {
-                Object[] linha = venda.clone();
-                if (linha[4] instanceof Number)
-                    linha[4] = MOEDA.format(((Number) linha[4]).doubleValue());
+            for (Object[] linha : new VendaDAO().listarTodas()) {
+                linha[4] = MOEDA.format((Double) linha[4]);
+                linha[5] = ((LocalDateTime) linha[5]).format(FMT_DATA);
                 modeloHistorico.addRow(linha);
             }
         } catch (SQLException e) {
@@ -321,7 +322,7 @@ public class TelaVendas extends javax.swing.JFrame {
             return;
         }
 
-        ItemCombo cliente = (ItemCombo) cbCliente.getSelectedItem();
+        Cliente cliente = (Cliente) cbCliente.getSelectedItem();
         if (cliente == null) {
             JOptionPane.showMessageDialog(this,
                     "Selecione um cliente antes de finalizar.",
@@ -345,11 +346,11 @@ public class TelaVendas extends javax.swing.JFrame {
                 "Confirmar venda", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (confirm != JOptionPane.YES_OPTION) return;
 
+        Map<Integer, Integer> itens = new LinkedHashMap<>();
+        for (ItemCarrinho item : carrinho) itens.put(item.produto.getId(), item.quantidade);
+
         try {
-            VendaDAO dao = new VendaDAO();
-            for (ItemCarrinho item : carrinho) {
-                dao.registrarVenda(cliente.getId(), item.produto.getId(), item.quantidade);
-            }
+            new VendaDAO().registrarVenda(cliente.getId(), itens);
             mostrarSucesso("Venda registrada com sucesso!\nTotal: " + MOEDA.format(total));
             carrinho.clear();
             atualizarTabelaCarrinho();
@@ -357,7 +358,7 @@ public class TelaVendas extends javax.swing.JFrame {
             carregarHistorico();
             txtBuscaProduto.requestFocusInWindow();
         } catch (SQLException e) {
-            mostrarErro("Falha ao registrar a venda. Nenhum item foi salvo.", e);
+            mostrarErro("A venda não foi registrada", e);
         }
     }
 
@@ -391,8 +392,7 @@ public class TelaVendas extends javax.swing.JFrame {
 
     private void mostrarErro(String mensagem, Exception e) {
         logger.log(Level.SEVERE, mensagem, e);
-        JOptionPane.showMessageDialog(this,
-                mensagem + "\nDetalhes: " + e.getMessage(),
+        JOptionPane.showMessageDialog(this, mensagem + ":\n" + e.getMessage(),
                 "Erro", JOptionPane.ERROR_MESSAGE);
     }
 
@@ -423,8 +423,7 @@ public class TelaVendas extends javax.swing.JFrame {
         scrollHistorico = new javax.swing.JScrollPane();
         tabelaHistorico = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Vendas - Sistema de Loja");
+        setTitle("Vendas - " + TelaPrincipal.NOME_LOJA);
 
         lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 20));
         lblTitulo.setText("Registrar venda");
@@ -653,27 +652,13 @@ public class TelaVendas extends javax.swing.JFrame {
         }
     }
 
-    public static void main(String args[]) {
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        java.awt.EventQueue.invokeLater(() -> new TelaVendas().setVisible(true));
-    }
-
     private javax.swing.JButton btnAdicionar;
     private javax.swing.JButton btnFinalizar;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnNovoCliente;
     private javax.swing.JButton btnRemover;
     private javax.swing.JButton btnVoltar;
-    private javax.swing.JComboBox<ItemCombo> cbCliente;
+    private javax.swing.JComboBox<Cliente> cbCliente;
     private javax.swing.JLabel lblBusca;
     private javax.swing.JLabel lblCarrinho;
     private javax.swing.JLabel lblCliente;
@@ -691,19 +676,6 @@ public class TelaVendas extends javax.swing.JFrame {
     private javax.swing.JTable tabelaHistorico;
     private javax.swing.JTable tabelaProdutos;
     private javax.swing.JTextField txtBuscaProduto;
-
-    public static class ItemCombo {
-        private final int id;
-        private final String nome;
-
-        public ItemCombo(int id, String nome) {
-            this.id = id;
-            this.nome = nome;
-        }
-        public int getId() { return id; }
-        public String getNome() { return nome; }
-        @Override public String toString() { return nome; }
-    }
 
     private static class ItemCarrinho {
         final Produto produto;

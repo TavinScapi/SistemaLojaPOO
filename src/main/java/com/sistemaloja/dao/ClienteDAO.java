@@ -62,22 +62,8 @@ public class ClienteDAO {
         }
     }
 
-    public void reativar(int id) throws SQLException {
-        String sql = "UPDATE clientes SET ativo=TRUE WHERE id=? AND ativo=FALSE";
-        try (Connection conn = Conexao.conectar();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            if (stmt.executeUpdate() == 0)
-                throw new SQLException("Cliente não encontrado ou já ativo (id=" + id + ").");
-        }
-    }
-
     public List<Cliente> listarAtivos() throws SQLException {
         return listar("SELECT * FROM clientes WHERE ativo=TRUE ORDER BY nome");
-    }
-
-    public List<Cliente> listarInativos() throws SQLException {
-        return listar("SELECT * FROM clientes WHERE ativo=FALSE ORDER BY nome");
     }
 
     public List<Cliente> buscarPorNome(String nome) throws SQLException {

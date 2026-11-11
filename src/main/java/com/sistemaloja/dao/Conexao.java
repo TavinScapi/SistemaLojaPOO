@@ -10,7 +10,7 @@ import org.sqlite.SQLiteConfig;
 
 public class Conexao {
 
-    private static final String ARQUIVO_PADRAO = "loja.db";
+    private static final String ARQUIVO_PADRAO = "octomax.db";
     private static volatile boolean schemaCriado = false;
 
     private static String arquivo() {

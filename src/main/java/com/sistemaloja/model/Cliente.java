@@ -52,19 +52,6 @@ public class Cliente {
     public LocalDateTime getDataCadastro() { return dataCadastro; }
     public LocalDateTime getDataAtualizacao() { return dataAtualizacao; }
 
-    public void atualizarDados(String nome, String cpf, String email,
-                               String telefone, String endereco, String observacoes) {
-        this.nome = nome;
-        this.cpf = cpf;
-        this.email = email;
-        this.telefone = telefone;
-        this.endereco = endereco;
-        this.observacoes = observacoes;
-    }
-
-    public void ativar()   { this.ativo = true; }
-    public void inativar() { this.ativo = false; }
-
     @Override
     public String toString() { return nome; }
 }

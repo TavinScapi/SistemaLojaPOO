@@ -32,9 +32,7 @@ public class TelaClientes extends javax.swing.JFrame {
     private boolean modoEdicao = false;
     private int idClienteSelecionado = -1;
 
-    private String snapshotNome = "";
-    private String snapshotEmail = "";
-    private String snapshotTelefone = "";
+    private String snapshot = "";
 
     public TelaClientes() {
         initComponents();
@@ -153,7 +151,7 @@ public class TelaClientes extends javax.swing.JFrame {
 
         int linhaModelo = tabela.convertRowIndexToModel(linhaVisual);
 
-        if (modoEdicao && !confirmarDescarte()) return;
+        if (!confirmarDescarte()) return;
 
         idClienteSelecionado = Integer.parseInt(
                 tabela.getModel().getValueAt(linhaModelo, 0).toString());
@@ -253,20 +251,23 @@ public class TelaClientes extends javax.swing.JFrame {
         txtNome.requestFocusInWindow();
     }
 
+    private String estadoFormulario() {
+        return String.join("|", txtNome.getText(), txtCpf.getText().replaceAll("\\D", ""),
+                txtEmail.getText(), txtTelefone.getText().replaceAll("\\D", ""),
+                txtEndereco.getText(), txtObservacoes.getText());
+    }
+
     private void atualizarSnapshot() {
-        snapshotNome = txtNome.getText();
-        snapshotEmail = txtEmail.getText();
-        snapshotTelefone = txtTelefone.getText();
+        snapshot = estadoFormulario();
     }
 
     private boolean formularioAlterado() {
-        return !txtNome.getText().equals(snapshotNome)
-            || !txtEmail.getText().equals(snapshotEmail)
-            || !txtTelefone.getText().equals(snapshotTelefone);
+        return !estadoFormulario().equals(snapshot);
     }
 
     private boolean confirmarDescarte() {
-        if (!formularioAlterado()) return true;
+        boolean visualizando = idClienteSelecionado != -1 && !modoEdicao;
+        if (visualizando || !formularioAlterado()) return true;
         int r = JOptionPane.showConfirmDialog(this,
                 "Há dados não salvos. Descartar?",
                 "Alterações pendentes",
@@ -411,8 +412,7 @@ public class TelaClientes extends javax.swing.JFrame {
         scrollTabela = new javax.swing.JScrollPane();
         tabela = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Clientes - Sistema de Loja");
+        setTitle("Clientes - " + TelaPrincipal.NOME_LOJA);
 
         lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 20));
         lblTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -623,22 +623,6 @@ public class TelaClientes extends javax.swing.JFrame {
         );
 
         pack();
-    }
-
-    public static void main(String args[]) {
-        System.setProperty("file.encoding", "UTF-8");
-
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        java.awt.EventQueue.invokeLater(() -> new TelaClientes().setVisible(true));
     }
 
     private javax.swing.JButton btnCadastrar;
