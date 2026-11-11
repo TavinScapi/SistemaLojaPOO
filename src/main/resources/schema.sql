@@ -1,7 +1,3 @@
--- Tabelas do Sistema Loja (SQLite).
--- Executado AUTOMATICAMENTE pelo sistema ao conectar (ver Conexao.java).
--- Usa IF NOT EXISTS, então pode rodar quantas vezes for.
-
 CREATE TABLE IF NOT EXISTS clientes (
     id               INTEGER PRIMARY KEY AUTOINCREMENT,
     nome             VARCHAR(120) NOT NULL,
@@ -15,7 +11,6 @@ CREATE TABLE IF NOT EXISTS clientes (
     data_atualizacao TIMESTAMP    NULL DEFAULT NULL
 );
 
--- Substitui o "ON UPDATE CURRENT_TIMESTAMP" do MySQL
 CREATE TRIGGER IF NOT EXISTS trg_clientes_atualizacao
 AFTER UPDATE ON clientes
 FOR EACH ROW WHEN NEW.data_atualizacao IS OLD.data_atualizacao
@@ -41,7 +36,6 @@ CREATE TABLE IF NOT EXISTS vendas (
     data_venda TIMESTAMP     NOT NULL DEFAULT (datetime('now', 'localtime'))
 );
 
--- Produtos de exemplo (só entram se a tabela estiver vazia)
 INSERT INTO produtos (nome, preco, estoque)
 SELECT 'Notebook Dell Inspiron 15', 3499.00, 10 WHERE NOT EXISTS (SELECT 1 FROM produtos)
 UNION ALL SELECT 'Monitor LG 24"',              799.90, 20 WHERE NOT EXISTS (SELECT 1 FROM produtos)

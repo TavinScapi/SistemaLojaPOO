@@ -1,4 +1,3 @@
-
 package com.sistemaloja.model;
 
 public class Produto {

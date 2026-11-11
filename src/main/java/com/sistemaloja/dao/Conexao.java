@@ -8,15 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import org.sqlite.SQLiteConfig;
 
-/**
- * Conexão com o banco SQLite.
- *
- * Não precisa instalar nada: o banco é o arquivo "loja.db", criado
- * automaticamente na pasta do projeto na primeira execução, já com as
- * tabelas e alguns produtos de exemplo (schema.sql em src/main/resources).
- *
- * Para usar outro arquivo, defina a variável de ambiente DB_ARQUIVO.
- */
 public class Conexao {
 
     private static final String ARQUIVO_PADRAO = "loja.db";
@@ -29,9 +20,9 @@ public class Conexao {
 
     public static Connection conectar() throws SQLException {
         SQLiteConfig config = new SQLiteConfig();
-        config.enforceForeignKeys(true);              // SQLite vem com FKs desligadas
-        config.setBusyTimeout(5000);                  // espera em vez de dar "database is locked"
-        config.setDateStringFormat("yyyy-MM-dd HH:mm:ss"); // formato das datas gravadas no schema
+        config.enforceForeignKeys(true);
+        config.setBusyTimeout(5000);
+        config.setDateStringFormat("yyyy-MM-dd HH:mm:ss");
 
         Connection con = config.createConnection("jdbc:sqlite:" + arquivo());
         if (!schemaCriado) {
@@ -40,7 +31,6 @@ public class Conexao {
         return con;
     }
 
-    /** Executa o schema.sql (CREATE ... IF NOT EXISTS) uma vez por execução. */
     private static synchronized void criarTabelas(Connection con) throws SQLException {
         if (schemaCriado) return;
         String script;
@@ -51,7 +41,7 @@ public class Conexao {
             throw new SQLException("Erro ao ler schema.sql", e);
         }
         try (Statement st = con.createStatement()) {
-            st.executeUpdate(script); // o driver do SQLite executa o script inteiro
+            st.executeUpdate(script);
         }
         schemaCriado = true;
     }

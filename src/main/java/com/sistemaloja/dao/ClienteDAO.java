@@ -9,16 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
-
-
-
-
-
 public class ClienteDAO {
-
-    
     public int salvar(Cliente c) throws SQLException {
         String sql = "INSERT INTO clientes " +
                 "(nome, cpf, email, telefone, endereco, observacoes) " +
@@ -39,8 +30,6 @@ public class ClienteDAO {
                 if (keys.next()) return keys.getInt(1);
             }
             return -1;
-        } catch (SQLException e) {
-            throw traduzirDuplicidade(e);
         }
     }
 
@@ -60,8 +49,6 @@ public class ClienteDAO {
             int linhas = stmt.executeUpdate();
             if (linhas == 0)
                 throw new SQLException("Cliente não encontrado ou já inativo (id=" + c.getId() + ").");
-        } catch (SQLException e) {
-            throw traduzirDuplicidade(e);
         }
     }
 
@@ -85,7 +72,6 @@ public class ClienteDAO {
         }
     }
 
-    
     public List<Cliente> listarAtivos() throws SQLException {
         return listar("SELECT * FROM clientes WHERE ativo=TRUE ORDER BY nome");
     }
@@ -153,7 +139,19 @@ public class ClienteDAO {
         }
     }
 
-    
+    public boolean existeCpf(String cpf, int idIgnorar) throws SQLException {
+        if (cpf == null || cpf.isBlank()) return false;
+        String sql = "SELECT 1 FROM clientes WHERE cpf=? AND id<>? LIMIT 1";
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, cpf);
+            stmt.setInt(2, idIgnorar);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+        }
+    }
+
     private List<Cliente> listar(String sql) throws SQLException {
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -187,15 +185,5 @@ public class ClienteDAO {
 
     private String vazioParaNull(String s) {
         return (s == null || s.trim().isEmpty()) ? null : s.trim();
-    }
-
-    private SQLException traduzirDuplicidade(SQLException e) {
-        String msg = e.getMessage() == null ? "" : e.getMessage().toLowerCase();
-        boolean duplicado = msg.contains("unique") || msg.contains("duplicate");
-        if (duplicado && msg.contains("email"))
-            return new SQLException("Já existe um cliente com este e-mail.", e);
-        if (duplicado && msg.contains("cpf"))
-            return new SQLException("Já existe um cliente com este CPF.", e);
-        return e;
     }
 }

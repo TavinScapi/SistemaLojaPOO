@@ -1,7 +1,3 @@
-
-
-
-
 package com.sistemaloja.view;
 
 import com.sistemaloja.model.Cliente;
@@ -11,7 +7,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.sql.SQLException;
+import java.util.concurrent.ExecutionException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.logging.Level;
@@ -24,23 +20,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 public class TelaClientes extends javax.swing.JFrame {
-
     private static final java.util.logging.Logger logger
             = java.util.logging.Logger.getLogger(TelaClientes.class.getName());
 
@@ -52,7 +32,6 @@ public class TelaClientes extends javax.swing.JFrame {
     private boolean modoEdicao = false;
     private int idClienteSelecionado = -1;
 
-    
     private String snapshotNome = "";
     private String snapshotEmail = "";
     private String snapshotTelefone = "";
@@ -78,7 +57,6 @@ public class TelaClientes extends javax.swing.JFrame {
         configurarMascaras();
         configurarBusca();
 
-        
         tabela.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && tabela.getSelectedRow() != -1) {
                 selecionarCliente();
@@ -90,7 +68,6 @@ public class TelaClientes extends javax.swing.JFrame {
         carregarClientesAsync();
     }
 
-    
     private void configurarTabela() {
         modeloTabela = new DefaultTableModel(
                 new Object[]{"Código", "Nome", "E-mail", "Telefone"}, 0) {
@@ -105,7 +82,6 @@ public class TelaClientes extends javax.swing.JFrame {
         tabela.setFillsViewportHeight(true);
     }
 
-    
     private void configurarMascaras() {
         try {
             MaskFormatter telMask = new MaskFormatter("(##) #####-####");
@@ -120,7 +96,6 @@ public class TelaClientes extends javax.swing.JFrame {
         }
     }
 
-    
     private void configurarBusca() {
         javax.swing.Timer timer = new javax.swing.Timer(300, e -> buscarAsync());
         timer.setRepeats(false);
@@ -132,7 +107,6 @@ public class TelaClientes extends javax.swing.JFrame {
         });
     }
 
-    
     private void carregarClientesAsync() {
         new SwingWorker<List<Cliente>, Void>() {
             @Override protected List<Cliente> doInBackground() throws Exception {
@@ -173,12 +147,10 @@ public class TelaClientes extends javax.swing.JFrame {
         }
     }
 
-    
     private void selecionarCliente() {
         int linhaVisual = tabela.getSelectedRow();
         if (linhaVisual == -1) return;
 
-        
         int linhaModelo = tabela.convertRowIndexToModel(linhaVisual);
 
         if (modoEdicao && !confirmarDescarte()) return;
@@ -190,7 +162,6 @@ public class TelaClientes extends javax.swing.JFrame {
         txtEmail.setText(tabela.getModel().getValueAt(linhaModelo, 2).toString());
         txtTelefone.setText(tabela.getModel().getValueAt(linhaModelo, 3).toString());
 
-        
         carregarDetalhesAsync(idClienteSelecionado);
 
         entrarModoVisualizacao();
@@ -216,7 +187,6 @@ public class TelaClientes extends javax.swing.JFrame {
         }.execute();
     }
 
-    
     private void entrarModoNovo() {
         modoEdicao = false;
         idClienteSelecionado = -1;
@@ -283,7 +253,6 @@ public class TelaClientes extends javax.swing.JFrame {
         txtNome.requestFocusInWindow();
     }
 
-    
     private void atualizarSnapshot() {
         snapshotNome = txtNome.getText();
         snapshotEmail = txtEmail.getText();
@@ -297,11 +266,7 @@ public class TelaClientes extends javax.swing.JFrame {
     }
 
     private boolean confirmarDescarte() {
-        
-        if (!modoEdicao && !formularioAlterado()) return true;
-        if (modoEdicao && !formularioAlterado()) {
-            
-        }
+        if (!formularioAlterado()) return true;
         int r = JOptionPane.showConfirmDialog(this,
                 "Há dados não salvos. Descartar?",
                 "Alterações pendentes",
@@ -309,26 +274,21 @@ public class TelaClientes extends javax.swing.JFrame {
         return r == JOptionPane.YES_OPTION;
     }
 
-    
     private void mostrarSucesso(String msg) {
         JOptionPane.showMessageDialog(this, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    
-
-
-
     private void mostrarErro(String contexto, Exception ex) {
-        logger.log(Level.SEVERE, contexto, ex);
-        String msg = contexto;
-        if (ex instanceof RegraNegocioException) {
-            msg = ex.getMessage();
-        } else if (ex instanceof SQLException) {
-            msg = "Erro de banco de dados. Contate o suporte.";
-        } else if (ex.getMessage() != null) {
-            msg += "\n" + ex.getMessage();
+        Throwable causa = ex instanceof ExecutionException && ex.getCause() != null
+                ? ex.getCause() : ex;
+        if (causa instanceof RegraNegocioException) {
+            JOptionPane.showMessageDialog(this, causa.getMessage(),
+                    "Verifique os dados", JOptionPane.WARNING_MESSAGE);
+            return;
         }
-        JOptionPane.showMessageDialog(this, msg, "Erro", JOptionPane.ERROR_MESSAGE);
+        logger.log(Level.SEVERE, contexto, causa);
+        JOptionPane.showMessageDialog(this, contexto + ":\n" + causa.getMessage(),
+                "Erro", JOptionPane.ERROR_MESSAGE);
     }
 
     private void voltarParaPrincipal() {
@@ -336,18 +296,17 @@ public class TelaClientes extends javax.swing.JFrame {
         dispose();
     }
 
-    
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {
         String nome = txtNome.getText().trim();
-        
+
         String cpfTexto = txtCpf.getText().replaceAll("\\D", "");
-        String cpf = cpfTexto.isEmpty() ? null : cpfTexto; 
-        
+        String cpf = cpfTexto.isEmpty() ? null : cpfTexto;
+
         String email = txtEmail.getText().trim();
-        
+
         String telTexto = txtTelefone.getText().replaceAll("\\D", "");
-        String telefone = telTexto.isEmpty() ? null : telTexto; 
-        
+        String telefone = telTexto.isEmpty() ? null : telTexto;
+
         String endereco = txtEndereco.getText().trim();
         String observacoes = txtObservacoes.getText().trim();
 
@@ -421,11 +380,9 @@ public class TelaClientes extends javax.swing.JFrame {
         if (confirmarDescarte()) voltarParaPrincipal();
     }
 
-    
     @SuppressWarnings("unchecked")
-    
-    private void initComponents() {
 
+    private void initComponents() {
         lblTitulo = new javax.swing.JLabel();
         btnVoltar = new javax.swing.JButton();
         pnlFormulario = new javax.swing.JPanel();
@@ -457,7 +414,7 @@ public class TelaClientes extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Clientes - Sistema de Loja");
 
-        lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 20)); 
+        lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 20));
         lblTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblTitulo.setText("Cadastro de clientes");
 
@@ -466,43 +423,43 @@ public class TelaClientes extends javax.swing.JFrame {
 
         pnlFormulario.setBorder(javax.swing.BorderFactory.createTitledBorder("Dados do cliente"));
 
-        lblCodigo.setFont(new java.awt.Font("Segoe UI", 0, 12)); 
+        lblCodigo.setFont(new java.awt.Font("Segoe UI", 0, 12));
         lblCodigo.setText("Código");
 
         txtCodigo.setEditable(false);
-        txtCodigo.setFont(new java.awt.Font("Segoe UI", 0, 14)); 
+        txtCodigo.setFont(new java.awt.Font("Segoe UI", 0, 14));
 
-        lblNome.setFont(new java.awt.Font("Segoe UI", 0, 12)); 
+        lblNome.setFont(new java.awt.Font("Segoe UI", 0, 12));
         lblNome.setText("Nome completo *");
 
-        txtNome.setFont(new java.awt.Font("Segoe UI", 0, 14)); 
+        txtNome.setFont(new java.awt.Font("Segoe UI", 0, 14));
 
-        lblCpf.setFont(new java.awt.Font("Segoe UI", 0, 12)); 
+        lblCpf.setFont(new java.awt.Font("Segoe UI", 0, 12));
         lblCpf.setText("CPF (opcional)");
 
-        txtCpf.setFont(new java.awt.Font("Segoe UI", 0, 14)); 
+        txtCpf.setFont(new java.awt.Font("Segoe UI", 0, 14));
 
-        lblEmail.setFont(new java.awt.Font("Segoe UI", 0, 12)); 
+        lblEmail.setFont(new java.awt.Font("Segoe UI", 0, 12));
         lblEmail.setText("E-mail *");
 
-        txtEmail.setFont(new java.awt.Font("Segoe UI", 0, 14)); 
+        txtEmail.setFont(new java.awt.Font("Segoe UI", 0, 14));
 
-        lblTelefone.setFont(new java.awt.Font("Segoe UI", 0, 12)); 
+        lblTelefone.setFont(new java.awt.Font("Segoe UI", 0, 12));
         lblTelefone.setText("Telefone *");
 
-        txtTelefone.setFont(new java.awt.Font("Segoe UI", 0, 14)); 
+        txtTelefone.setFont(new java.awt.Font("Segoe UI", 0, 14));
 
-        lblEndereco.setFont(new java.awt.Font("Segoe UI", 0, 12)); 
+        lblEndereco.setFont(new java.awt.Font("Segoe UI", 0, 12));
         lblEndereco.setText("Endereço");
 
-        txtEndereco.setFont(new java.awt.Font("Segoe UI", 0, 14)); 
+        txtEndereco.setFont(new java.awt.Font("Segoe UI", 0, 14));
 
-        lblObservacoes.setFont(new java.awt.Font("Segoe UI", 0, 12)); 
+        lblObservacoes.setFont(new java.awt.Font("Segoe UI", 0, 12));
         lblObservacoes.setText("Observações");
 
         txtObservacoes.setColumns(20);
         txtObservacoes.setRows(3);
-        txtObservacoes.setFont(new java.awt.Font("Segoe UI", 0, 13)); 
+        txtObservacoes.setFont(new java.awt.Font("Segoe UI", 0, 13));
         scrollObservacoes.setViewportView(txtObservacoes);
 
         btnCadastrar.setText("Cadastrar");
@@ -597,10 +554,10 @@ public class TelaClientes extends javax.swing.JFrame {
 
         pnlTabela.setBorder(javax.swing.BorderFactory.createTitledBorder("Clientes cadastrados"));
 
-        lblBusca.setFont(new java.awt.Font("Segoe UI", 0, 12)); 
+        lblBusca.setFont(new java.awt.Font("Segoe UI", 0, 12));
         lblBusca.setText("Buscar por nome, e-mail, telefone ou CPF:");
 
-        txtBusca.setFont(new java.awt.Font("Segoe UI", 0, 13)); 
+        txtBusca.setFont(new java.awt.Font("Segoe UI", 0, 13));
 
         tabela.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {},
@@ -684,7 +641,6 @@ public class TelaClientes extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> new TelaClientes().setVisible(true));
     }
 
-    
     private javax.swing.JButton btnCadastrar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnExcluir;
@@ -712,7 +668,6 @@ public class TelaClientes extends javax.swing.JFrame {
     private javax.swing.JTextArea txtObservacoes;
     private javax.swing.JFormattedTextField txtTelefone;
     private javax.swing.JTextField txtNome;
-    
 
     private javax.swing.table.DefaultTableModel modeloTabela;
 }

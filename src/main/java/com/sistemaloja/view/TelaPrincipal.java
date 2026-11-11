@@ -1,7 +1,3 @@
-
-
-
-
 package com.sistemaloja.view;
 
 import java.awt.Color;
@@ -18,42 +14,19 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-
-
-
-
-
-
-
-
-
-
-
-
 public class TelaPrincipal extends javax.swing.JFrame {
-
     private static final java.util.logging.Logger logger
             = java.util.logging.Logger.getLogger(TelaPrincipal.class.getName());
 
-    
-
-
     public TelaPrincipal() {
-        initComponents();      
-        posConstrucao();       
+        initComponents();
+        posConstrucao();
     }
-
-    
-
-
-
-
 
     private void posConstrucao() {
         setLocationRelativeTo(null);
         setMinimumSize(new Dimension(600, 400));
 
-        
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             @Override
@@ -62,15 +35,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
             }
         });
 
-        
         aplicarHover(btnClientes);
         aplicarHover(btnProdutos);
         aplicarHover(btnVendas);
     }
-
-    
-
-
 
     private void aplicarHover(JButton btn) {
         Color base = btn.getBackground();
@@ -88,7 +56,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
         });
     }
 
-    
     private void abrirTela(Supplier<JFrame> fabrica, String nomeTela) {
         try {
             JFrame tela = fabrica.get();
@@ -114,15 +81,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
         }
     }
 
-    
-
-
-
-
     @SuppressWarnings("unchecked")
-    
-    private void initComponents() {
 
+    private void initComponents() {
         painelCabecalho = new javax.swing.JPanel();
         lblTitulo = new javax.swing.JLabel();
         lblSubtitulo = new javax.swing.JLabel();
@@ -138,12 +99,12 @@ public class TelaPrincipal extends javax.swing.JFrame {
         painelCabecalho.setBackground(new java.awt.Color(248, 249, 250));
         painelCabecalho.setBorder(javax.swing.BorderFactory.createEmptyBorder(30, 20, 20, 20));
 
-        lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 22)); 
+        lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 22));
         lblTitulo.setForeground(new java.awt.Color(33, 37, 41));
         lblTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblTitulo.setText("Sistema de Gerenciamento de Loja");
 
-        lblSubtitulo.setFont(new java.awt.Font("Segoe UI", 0, 13)); 
+        lblSubtitulo.setFont(new java.awt.Font("Segoe UI", 0, 13));
         lblSubtitulo.setForeground(new java.awt.Color(108, 117, 125));
         lblSubtitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblSubtitulo.setText("Selecione um módulo para começar");
@@ -174,7 +135,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         painelBotoes.setLayout(new java.awt.GridLayout(1, 3, 20, 20));
 
         btnClientes.setBackground(new java.awt.Color(13, 110, 253));
-        btnClientes.setFont(new java.awt.Font("Segoe UI", 1, 15)); 
+        btnClientes.setFont(new java.awt.Font("Segoe UI", 1, 15));
         btnClientes.setForeground(new java.awt.Color(255, 255, 255));
         btnClientes.setText("👥  Clientes");
         btnClientes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -185,7 +146,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         painelBotoes.add(btnClientes);
 
         btnProdutos.setBackground(new java.awt.Color(25, 135, 84));
-        btnProdutos.setFont(new java.awt.Font("Segoe UI", 1, 15)); 
+        btnProdutos.setFont(new java.awt.Font("Segoe UI", 1, 15));
         btnProdutos.setForeground(new java.awt.Color(255, 255, 255));
         btnProdutos.setText("📦  Produtos");
         btnProdutos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -196,7 +157,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         painelBotoes.add(btnProdutos);
 
         btnVendas.setBackground(new java.awt.Color(255, 193, 7));
-        btnVendas.setFont(new java.awt.Font("Segoe UI", 1, 15)); 
+        btnVendas.setFont(new java.awt.Font("Segoe UI", 1, 15));
         btnVendas.setForeground(new java.awt.Color(255, 255, 255));
         btnVendas.setText("💰  Vendas");
         btnVendas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -235,9 +196,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
         abrirTela(TelaVendas::new, "Vendas");
     }
 
-    
-
-
     public static void main(String args[]) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -252,7 +210,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> new TelaPrincipal().setVisible(true));
     }
 
-    
     private javax.swing.JButton btnClientes;
     private javax.swing.JButton btnProdutos;
     private javax.swing.JButton btnVendas;
@@ -260,5 +217,4 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JPanel painelBotoes;
     private javax.swing.JPanel painelCabecalho;
-    
 }

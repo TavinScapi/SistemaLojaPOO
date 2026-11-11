@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package com.sistemaloja.view;
 
 import com.sistemaloja.dao.ClienteDAO;
@@ -32,7 +28,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 public class TelaVendas extends javax.swing.JFrame {
-
     private static final java.util.logging.Logger logger
             = java.util.logging.Logger.getLogger(TelaVendas.class.getName());
 
@@ -403,7 +398,6 @@ public class TelaVendas extends javax.swing.JFrame {
 
     @SuppressWarnings("unchecked")
     private void initComponents() {
-
         lblTitulo = new javax.swing.JLabel();
         btnVoltar = new javax.swing.JButton();
         lblCliente = new javax.swing.JLabel();

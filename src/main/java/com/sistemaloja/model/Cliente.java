@@ -2,12 +2,7 @@ package com.sistemaloja.model;
 
 import java.time.LocalDateTime;
 
-
-
-
-
 public class Cliente {
-
     private int id;
     private String nome;
     private String cpf;
@@ -19,7 +14,6 @@ public class Cliente {
     private LocalDateTime dataCadastro;
     private LocalDateTime dataAtualizacao;
 
-    
     public Cliente(int id, String nome, String cpf, String email, String telefone,
                    String endereco, String observacoes, boolean ativo,
                    LocalDateTime dataCadastro, LocalDateTime dataAtualizacao) {
@@ -35,21 +29,18 @@ public class Cliente {
         this.dataAtualizacao = dataAtualizacao;
     }
 
-    
     public Cliente(String nome, String cpf, String email, String telefone,
                    String endereco, String observacoes) {
         this(0, nome, cpf, email, telefone, endereco, observacoes,
                 true, null, null);
     }
 
-    
     public Cliente(int id, String nome, String cpf, String email,
                    String telefone, String endereco, String observacoes) {
         this(id, nome, cpf, email, telefone, endereco, observacoes,
                 true, null, null);
     }
 
-    
     public int getId() { return id; }
     public String getNome() { return nome; }
     public String getCpf() { return cpf; }
@@ -61,7 +52,6 @@ public class Cliente {
     public LocalDateTime getDataCadastro() { return dataCadastro; }
     public LocalDateTime getDataAtualizacao() { return dataAtualizacao; }
 
-    
     public void atualizarDados(String nome, String cpf, String email,
                                String telefone, String endereco, String observacoes) {
         this.nome = nome;

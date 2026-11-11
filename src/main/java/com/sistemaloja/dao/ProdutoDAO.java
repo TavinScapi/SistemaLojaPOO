@@ -6,12 +6,10 @@ import java.util.List;
 import com.sistemaloja.model.Produto;
 
 public class ProdutoDAO {
-
     public void salvar(Produto produto) throws SQLException {
         String sql = "INSERT INTO produtos (nome, preco, estoque) VALUES (?, ?, ?)";
 
         try (Connection con = Conexao.conectar(); PreparedStatement stmt = con.prepareStatement(sql)) {
-
             stmt.setString(1, produto.getNome());
             stmt.setDouble(2, produto.getPreco());
             stmt.setInt(3, produto.getEstoque());
@@ -24,7 +22,6 @@ public class ProdutoDAO {
         String sql = "SELECT id, nome, preco, estoque FROM produtos ORDER BY id";
 
         try (Connection con = Conexao.conectar(); PreparedStatement stmt = con.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
-
             while (rs.next()) {
                 produtos.add(new Produto(
                         rs.getInt("id"),
@@ -42,7 +39,6 @@ public class ProdutoDAO {
         String sql = "UPDATE produtos SET nome=?, preco=?, estoque=? WHERE id=?";
 
         try (Connection con = Conexao.conectar(); PreparedStatement stmt = con.prepareStatement(sql)) {
-
             stmt.setString(1, produto.getNome());
             stmt.setDouble(2, produto.getPreco());
             stmt.setInt(3, produto.getEstoque());
@@ -55,7 +51,6 @@ public class ProdutoDAO {
         String sql = "DELETE FROM produtos WHERE id=?";
 
         try (Connection con = Conexao.conectar(); PreparedStatement stmt = con.prepareStatement(sql)) {
-
             stmt.setInt(1, id);
             stmt.executeUpdate();
         }
@@ -69,7 +64,6 @@ public class ProdutoDAO {
                 + "ORDER BY nome";
 
         try (Connection con = Conexao.conectar(); PreparedStatement ps = con.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
-
             while (rs.next()) {
                 Produto produto = new Produto(
                         rs.getInt("id"),
@@ -84,5 +78,4 @@ public class ProdutoDAO {
 
         return produtos;
     }
-
 }

@@ -1,7 +1,3 @@
-
-
-
-
 package com.sistemaloja.view;
 
 import com.sistemaloja.dao.ProdutoDAO;
@@ -27,39 +23,20 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
-
-
-
-
-
-
-
-
-
-
-
 public class TelaProdutos extends javax.swing.JFrame {
-
     private static final java.util.logging.Logger logger
             = java.util.logging.Logger.getLogger(TelaProdutos.class.getName());
 
     private static final Locale BR = new Locale("pt", "BR");
     private static final NumberFormat MOEDA = NumberFormat.getCurrencyInstance(BR);
 
-    
     private boolean modoEdicao = false;
     private int idProdutoSelecionado = -1;
 
-    
-
-
     public TelaProdutos() {
-        initComponents();       
-        posConstrucao();        
+        initComponents();
+        posConstrucao();
     }
-
-    
-
 
     private void posConstrucao() {
         setLocationRelativeTo(null);
@@ -75,17 +52,14 @@ public class TelaProdutos extends javax.swing.JFrame {
             }
         });
 
-        
         aplicarHover(btnCadastrar);
         aplicarHover(btnEditar);
         aplicarHover(btnExcluir);
         aplicarHover(btnLimpar);
         aplicarHover(btnVoltar);
 
-        
         configurarTabela();
 
-        
         txtBusca.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
@@ -146,7 +120,6 @@ public class TelaProdutos extends javax.swing.JFrame {
         });
     }
 
-    
     private void carregarProdutos() {
         try {
             List<Produto> produtos = new ProdutoDAO().listarTodos();
@@ -191,7 +164,6 @@ public class TelaProdutos extends javax.swing.JFrame {
         txtCodigo.setText(String.valueOf(idProdutoSelecionado));
         txtNome.setText(tabela.getValueAt(linha, 1).toString());
 
-        
         String precoFormatado = tabela.getValueAt(linha, 2).toString();
         String precoBruto = precoFormatado
                 .replace("R$", "")
@@ -203,7 +175,6 @@ public class TelaProdutos extends javax.swing.JFrame {
         entrarModoVisualizacao();
     }
 
-    
     private void entrarModoNovo() {
         modoEdicao = false;
         idProdutoSelecionado = -1;
@@ -256,7 +227,6 @@ public class TelaProdutos extends javax.swing.JFrame {
         txtNome.requestFocusInWindow();
     }
 
-    
     private void mostrarSucesso(String msg) {
         JOptionPane.showMessageDialog(this, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
     }
@@ -282,15 +252,9 @@ public class TelaProdutos extends javax.swing.JFrame {
         dispose();
     }
 
-    
-
-
-
-
     @SuppressWarnings("unchecked")
-    
-    private void initComponents() {
 
+    private void initComponents() {
         lblTitulo = new javax.swing.JLabel();
         btnVoltar = new javax.swing.JButton();
         pnlFormulario = new javax.swing.JPanel();
@@ -315,7 +279,7 @@ public class TelaProdutos extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Produtos - Sistema de Loja");
 
-        lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 20)); 
+        lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 20));
         lblTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblTitulo.setText("Cadastro de Produtos");
 
@@ -326,27 +290,27 @@ public class TelaProdutos extends javax.swing.JFrame {
                 javax.swing.BorderFactory.createLineBorder(new java.awt.Color(222, 226, 230)),
                 javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20)));
 
-        lblCodigo.setFont(new java.awt.Font("Segoe UI", 1, 12)); 
+        lblCodigo.setFont(new java.awt.Font("Segoe UI", 1, 12));
         lblCodigo.setText("Código");
 
         txtCodigo.setEditable(false);
         txtCodigo.setBackground(new java.awt.Color(233, 236, 239));
-        txtCodigo.setFont(new java.awt.Font("Segoe UI", 0, 14)); 
+        txtCodigo.setFont(new java.awt.Font("Segoe UI", 0, 14));
 
-        lblNome.setFont(new java.awt.Font("Segoe UI", 1, 12)); 
+        lblNome.setFont(new java.awt.Font("Segoe UI", 1, 12));
         lblNome.setText("Nome do Produto");
 
-        txtNome.setFont(new java.awt.Font("Segoe UI", 0, 14)); 
+        txtNome.setFont(new java.awt.Font("Segoe UI", 0, 14));
 
-        lblPreco.setFont(new java.awt.Font("Segoe UI", 1, 12)); 
+        lblPreco.setFont(new java.awt.Font("Segoe UI", 1, 12));
         lblPreco.setText("Preço (R$)");
 
-        txtPreco.setFont(new java.awt.Font("Segoe UI", 0, 14)); 
+        txtPreco.setFont(new java.awt.Font("Segoe UI", 0, 14));
 
-        lblEstoque.setFont(new java.awt.Font("Segoe UI", 1, 12)); 
+        lblEstoque.setFont(new java.awt.Font("Segoe UI", 1, 12));
         lblEstoque.setText("Estoque");
 
-        txtEstoque.setFont(new java.awt.Font("Segoe UI", 0, 14)); 
+        txtEstoque.setFont(new java.awt.Font("Segoe UI", 0, 14));
 
         btnCadastrar.setText("Cadastrar");
         btnCadastrar.addActionListener(this::btnCadastrarActionPerformed);
@@ -423,10 +387,10 @@ public class TelaProdutos extends javax.swing.JFrame {
                 javax.swing.BorderFactory.createLineBorder(new java.awt.Color(222, 226, 230)),
                 javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20)));
 
-        lblBusca.setFont(new java.awt.Font("Segoe UI", 1, 12)); 
+        lblBusca.setFont(new java.awt.Font("Segoe UI", 1, 12));
         lblBusca.setText("Buscar por nome:");
 
-        txtBusca.setFont(new java.awt.Font("Segoe UI", 0, 13)); 
+        txtBusca.setFont(new java.awt.Font("Segoe UI", 0, 13));
 
         tabela.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {},
@@ -596,9 +560,6 @@ public class TelaProdutos extends javax.swing.JFrame {
         }
     }
 
-    
-
-
     public static void main(String args[]) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -613,7 +574,6 @@ public class TelaProdutos extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> new TelaProdutos().setVisible(true));
     }
 
-    
     private javax.swing.JButton btnCadastrar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnExcluir;
@@ -634,8 +594,6 @@ public class TelaProdutos extends javax.swing.JFrame {
     private javax.swing.JTextField txtEstoque;
     private javax.swing.JTextField txtNome;
     private javax.swing.JTextField txtPreco;
-    
 
-    
     private javax.swing.table.DefaultTableModel modeloTabela;
 }
